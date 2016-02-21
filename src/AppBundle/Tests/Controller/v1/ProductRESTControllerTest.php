@@ -12,12 +12,16 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class ProductRESTControllerTest extends WebTestCase
 {
+    const HTTP_HOST = 'localhost';
+
     /** @var \Symfony\Bundle\FrameworkBundle\Client */
     protected $client;
 
     public function setUp()
     {
-        $this->client = static::makeClient();
+        $this->client = static::createClient(array(), array(
+            'HTTP_HOST' => self::HTTP_HOST,
+        ));
     }
 
     public function testJsonGetProductAction()
@@ -60,12 +64,9 @@ class ProductRESTControllerTest extends WebTestCase
         $this->client->request('POST', $route, [], [], ['CONTENT_TYPE' => 'application/json'], $new);
 
         $this->assertStatusCode(Response::HTTP_CREATED, $this->client);
-
-        //$content = $this->client->getResponse()->getContent();
-        //$this->assertJson($content);
     }
 
-    public function testJsonPutProductActionModify()
+    public function testJsonPutProductActionShouldModifyAndHeaderLocation()
     {
         $products = $this->prepareFixtures();
         /** @var  $product Product */
@@ -75,6 +76,7 @@ class ProductRESTControllerTest extends WebTestCase
 
         $route = $this->getUrl('api_v1_put_product', ['entity'=>$product->getId()]);
         $this->client->request('PUT', $route, [], [], ['CONTENT_TYPE' => 'application/json'], $modify);
+        $head_location = $this->client->getResponse()->headers->get('location');
 
         $this->assertStatusCode(Response::HTTP_NO_CONTENT, $this->client);
 
@@ -85,6 +87,7 @@ class ProductRESTControllerTest extends WebTestCase
         $modify = str_replace('{', '{"id":'.$product->getId().',', $modify);
 
         $this->assertEquals($modify, $content);
+        $this->assertEquals('http://'.self::HTTP_HOST.$route, $head_location);
     }
 
     public function testDeleteProduct()
