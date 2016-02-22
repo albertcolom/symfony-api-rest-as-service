@@ -3,27 +3,15 @@
 namespace AppBundle\Tests\Controller\v1;
 
 use AppBundle\Entity\Product;
-use Liip\FunctionalTestBundle\Test\WebTestCase;
+use AppBundle\Application\Test\ControllerTestCase;
 use AppBundle\Tests\Fixtures\Entity\ProductData;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @group Product
  */
-class ProductRESTControllerTest extends WebTestCase
+class ProductRESTControllerTest extends ControllerTestCase
 {
-    const HTTP_HOST = 'localhost';
-
-    /** @var \Symfony\Bundle\FrameworkBundle\Client */
-    protected $client;
-
-    public function setUp()
-    {
-        $this->client = static::createClient(array(), array(
-            'HTTP_HOST' => self::HTTP_HOST,
-        ));
-    }
-
     public function testJsonGetProductAction()
     {
         $products = $this->prepareFixtures();
@@ -37,6 +25,8 @@ class ProductRESTControllerTest extends WebTestCase
         $this->assertStatusCode(Response::HTTP_OK, $this->client);
 
         $content = $this->client->getResponse()->getContent();
+
+        dump(json_decode(json_encode($product)));
 
         $this->assertJson($content);
     }
@@ -124,28 +114,5 @@ class ProductRESTControllerTest extends WebTestCase
         $fixtures = array('AppBundle\Tests\Fixtures\Entity\ProductData');
         $this->loadFixtures($fixtures);
         return ProductData::$products;
-    }
-
-    /**
-     * @param string $json
-     * @param string $key
-     * @return null|string
-     */
-    public function getValueFromJson($json, $key)
-    {
-        $decode = json_decode($json, true);
-        return array_key_exists($key, $decode) ? $decode[$key] : null;
-    }
-
-    /**
-     * @param string $json
-     * @param array $array
-     * @return string
-     */
-    public function addJsonValue($json, array $array)
-    {
-        $decode = json_decode($json, true);
-        $merge = array_merge($array, $decode);
-        return json_encode($merge);
     }
 }
