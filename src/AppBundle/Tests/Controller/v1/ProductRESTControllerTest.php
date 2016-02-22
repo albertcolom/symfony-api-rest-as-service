@@ -26,8 +26,6 @@ class ProductRESTControllerTest extends ControllerTestCase
 
         $content = $this->client->getResponse()->getContent();
 
-        dump(json_decode(json_encode($product)));
-
         $this->assertJson($content);
     }
 
