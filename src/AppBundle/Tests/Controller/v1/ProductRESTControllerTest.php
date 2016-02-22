@@ -56,7 +56,7 @@ class ProductRESTControllerTest extends WebTestCase
         $this->assertCount(count($products), json_decode($content));
     }
 
-    public function testJsonPostProductAction()
+    public function testJsonPostProductActionShouldCreateWithHeaderLocation()
     {
         $new = '{"name":"name post","description":"description post","active":true}';
 
@@ -64,33 +64,42 @@ class ProductRESTControllerTest extends WebTestCase
         $this->client->request('POST', $route, [], [], ['CONTENT_TYPE' => 'application/json'], $new);
 
         $this->assertStatusCode(Response::HTTP_CREATED, $this->client);
+
+        $head_location = $this->client->getResponse()->headers->get('location');
+        $this->client->request('GET', $head_location);
+
+        $this->assertStatusCode(Response::HTTP_OK, $this->client);
+        $content = $this->client->getResponse()->getContent();
+
+        $new = $this->addJsonValue($new, ['id' => $this->getValueFromJson($content,'id')]);
+
+        $this->assertEquals($content, $new);
     }
 
-    public function testJsonPutProductActionShouldModifyAndHeaderLocation()
+    public function testJsonPutProductActionShouldModifyWithHeaderLocation()
     {
         $products = $this->prepareFixtures();
         /** @var  $product Product */
         $product = end($products);
 
-        $modify = '{"name":"test put","description":"description put","active":true}';
+        $modify = '{"name":"test put"}';
 
         $route = $this->getUrl('api_v1_put_product', ['entity'=>$product->getId()]);
         $this->client->request('PUT', $route, [], [], ['CONTENT_TYPE' => 'application/json'], $modify);
-        $head_location = $this->client->getResponse()->headers->get('location');
 
         $this->assertStatusCode(Response::HTTP_NO_CONTENT, $this->client);
 
-        $route = $this->getUrl('api_v1_get_product', ['entity'=>$product->getId()]);
-        $this->client->request('GET', $route);
+        $head_location = $this->client->getResponse()->headers->get('location');
+        $this->client->request('GET', $head_location);
 
+        $this->assertStatusCode(Response::HTTP_OK, $this->client);
         $content = $this->client->getResponse()->getContent();
-        $modify = str_replace('{', '{"id":'.$product->getId().',', $modify);
 
-        $this->assertEquals($modify, $content);
-        $this->assertEquals('http://'.self::HTTP_HOST.$route, $head_location);
+        $this->assertEquals($this->getValueFromJson($content,'id'), $product->getId());
+        $this->assertEquals($this->getValueFromJson($modify,'name'), $this->getValueFromJson($content,'name'));
     }
 
-    public function testDeleteProduct()
+    public function testDeleteProductAction()
     {
         $products = $this->prepareFixtures();
         /** @var  $product Product */
@@ -100,6 +109,11 @@ class ProductRESTControllerTest extends WebTestCase
         $this->client->request('DELETE', $route);
 
         $this->assertStatusCode(Response::HTTP_NO_CONTENT, $this->client);
+
+        $route = $this->getUrl('api_v1_get_product', ['entity'=>$product->getId()]);
+        $this->client->request('GET', $route);
+
+        $this->assertStatusCode(Response::HTTP_NOT_FOUND, $this->client);
     }
 
     /**
@@ -110,5 +124,28 @@ class ProductRESTControllerTest extends WebTestCase
         $fixtures = array('AppBundle\Tests\Fixtures\Entity\ProductData');
         $this->loadFixtures($fixtures);
         return ProductData::$products;
+    }
+
+    /**
+     * @param string $json
+     * @param string $key
+     * @return null|string
+     */
+    public function getValueFromJson($json, $key)
+    {
+        $decode = json_decode($json, true);
+        return array_key_exists($key, $decode) ? $decode[$key] : null;
+    }
+
+    /**
+     * @param string $json
+     * @param array $array
+     * @return string
+     */
+    public function addJsonValue($json, array $array)
+    {
+        $decode = json_decode($json, true);
+        $merge = array_merge($array, $decode);
+        return json_encode($merge);
     }
 }
