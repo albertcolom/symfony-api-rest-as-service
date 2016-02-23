@@ -20,7 +20,7 @@ class ProductRESTControllerTest extends ControllerTestCase
         $product = end($products);
 
         $route = $this->getUrl('api_v1_get_product', ['entity'=>$product->getId()]);
-        $this->client->request('GET', $route);
+        $this->client->request('GET', $route, [], [], $this->getJsonHeaders());
 
         $this->assertStatusCode(Response::HTTP_OK, $this->client);
 
@@ -34,7 +34,7 @@ class ProductRESTControllerTest extends ControllerTestCase
         $products = $this->prepareFixtures();
 
         $route = $this->getUrl('api_v1_get_products');
-        $this->client->request('GET', $route);
+        $this->client->request('GET', $route, [], [], $this->getJsonHeaders());
 
         $this->assertStatusCode(Response::HTTP_OK, $this->client);
 
@@ -49,12 +49,12 @@ class ProductRESTControllerTest extends ControllerTestCase
         $new = '{"name":"name post","description":"description post","active":true}';
 
         $route = $this->getUrl('api_v1_post_product');
-        $this->client->request('POST', $route, [], [], ['CONTENT_TYPE' => 'application/json'], $new);
+        $this->client->request('POST', $route, [], [], $this->getJsonHeaders(), $new);
 
         $this->assertStatusCode(Response::HTTP_CREATED, $this->client);
 
         $head_location = $this->client->getResponse()->headers->get('location');
-        $this->client->request('GET', $head_location);
+        $this->client->request('GET', $head_location, [], [], $this->getJsonHeaders());
 
         $this->assertStatusCode(Response::HTTP_OK, $this->client);
         $content = $this->client->getResponse()->getContent();
@@ -73,12 +73,12 @@ class ProductRESTControllerTest extends ControllerTestCase
         $modify = '{"name":"test put"}';
 
         $route = $this->getUrl('api_v1_put_product', ['entity'=>$product->getId()]);
-        $this->client->request('PUT', $route, [], [], ['CONTENT_TYPE' => 'application/json'], $modify);
+        $this->client->request('PUT', $route, [], [], $this->getJsonHeaders(), $modify);
 
         $this->assertStatusCode(Response::HTTP_NO_CONTENT, $this->client);
 
         $head_location = $this->client->getResponse()->headers->get('location');
-        $this->client->request('GET', $head_location);
+        $this->client->request('GET', $head_location, [], [], $this->getJsonHeaders());
 
         $this->assertStatusCode(Response::HTTP_OK, $this->client);
         $content = $this->client->getResponse()->getContent();
@@ -87,19 +87,19 @@ class ProductRESTControllerTest extends ControllerTestCase
         $this->assertEquals($this->getValueFromJson($modify,'name'), $this->getValueFromJson($content,'name'));
     }
 
-    public function testDeleteProductAction()
+    public function testJsonDeleteProductAction()
     {
         $products = $this->prepareFixtures();
         /** @var  $product Product */
         $product = end($products);
 
         $route = $this->getUrl('api_v1_delete_product', ['entity'=>$product->getId()]);
-        $this->client->request('DELETE', $route);
+        $this->client->request('DELETE', $route, [], [], $this->getJsonHeaders());
 
         $this->assertStatusCode(Response::HTTP_NO_CONTENT, $this->client);
 
         $route = $this->getUrl('api_v1_get_product', ['entity'=>$product->getId()]);
-        $this->client->request('GET', $route);
+        $this->client->request('GET', $route, [], [], $this->getJsonHeaders());
 
         $this->assertStatusCode(Response::HTTP_NOT_FOUND, $this->client);
     }

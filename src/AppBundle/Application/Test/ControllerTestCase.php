@@ -20,6 +20,17 @@ abstract class ControllerTestCase extends WebTestCase
     }
 
     /**
+     * @return array
+     */
+    protected function getJsonHeaders()
+    {
+        return [
+            'HTTP_ACCEPT' => 'application/json',
+            'CONTENT_TYPE' => 'application/json',
+        ];
+    }
+
+    /**
      * @param string $json
      * @param string $key
      * @return null|string
