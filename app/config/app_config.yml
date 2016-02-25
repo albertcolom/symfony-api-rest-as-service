@@ -30,6 +30,18 @@ fos_rest:
 #    service:
 #        inflector: util.inflector
 
+jms_serializer:
+    property_naming:
+        separator:
+        lower_case: true
+
+    metadata:
+        cache: file
+        debug: "%kernel.debug%"
+        file_cache:
+            dir: "%kernel.cache_dir%/serializer"
+        auto_detection: true
+
 nelmio_cors:
     defaults:
         allow_credentials: false
