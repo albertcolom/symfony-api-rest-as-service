@@ -2,10 +2,11 @@
 namespace AppBundle\Tests\Fixtures\Entity;
 
 use AppBundle\Entity\Product;
-use Doctrine\Common\DataFixtures\FixtureInterface;
+use Doctrine\Common\DataFixtures\AbstractFixture;
+use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 
-class ProductData implements FixtureInterface
+class ProductData extends AbstractFixture implements OrderedFixtureInterface
 {
     static public $products;
 
@@ -20,10 +21,16 @@ class ProductData implements FixtureInterface
             $product->setDescription($value['description']);
             $product->setActive($value['active']);
             $manager->persist($product);
+            $this->addReference($reference, $product);
 
             self::$products[] = $product;
         }
         $manager->flush();
+    }
+
+    public function getOrder()
+    {
+        return 1;
     }
 
     public function getDataArray()
