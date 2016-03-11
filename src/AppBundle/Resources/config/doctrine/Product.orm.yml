@@ -1,0 +1,30 @@
+AppBundle\Entity\Product:
+    type: entity
+    table: product
+    repositoryClass: AppBundle\Entity\Repository\ProductRepository
+    id:
+        id:
+            type: integer
+            nullable: false
+            options:
+                unsigned: false
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        name:
+            type: string
+            nullable: false
+            length: 255
+            options:
+                fixed: false
+        description:
+            type: text
+            nullable: true
+            length: null
+            options:
+                fixed: false
+        active:
+            type: boolean
+            nullable: false
+    lifecycleCallbacks: {  }
