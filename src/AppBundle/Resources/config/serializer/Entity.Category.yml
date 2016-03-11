@@ -1,0 +1,9 @@
+AppBundle\Entity\Category:
+    exclusion_policy: all
+    properties:
+        id:
+            type: integer
+        name:
+            type: string
+        description:
+            type: string
