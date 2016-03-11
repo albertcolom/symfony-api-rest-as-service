@@ -27,4 +27,15 @@ AppBundle\Entity\Product:
         active:
             type: boolean
             nullable: false
+    manyToOne:
+        category:
+            targetEntity: Category
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                category_id:
+                    referencedColumnName: id
+            orphanRemoval: false
     lifecycleCallbacks: {  }

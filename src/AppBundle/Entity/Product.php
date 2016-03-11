@@ -31,6 +31,11 @@ class Product
     private $active;
 
     /**
+     * @var Category
+     */
+    private $category;
+
+    /**
      * Get id
      *
      * @return integer 
@@ -107,5 +112,29 @@ class Product
     public function getActive()
     {
         return $this->active;
+    }
+
+    /**
+     * Set category
+     *
+     * @param Category $category
+     *
+     * @return Product
+     */
+    public function setCategory(Category $category = null)
+    {
+        $this->category = $category;
+
+        return $this;
+    }
+
+    /**
+     * Get category
+     *
+     * @return Category
+     */
+    public function getCategory()
+    {
+        return $this->category;
     }
 }

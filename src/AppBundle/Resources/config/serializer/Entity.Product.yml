@@ -9,3 +9,4 @@ AppBundle\Entity\Product:
             type: string
         active:
             type: boolean
+        category:
