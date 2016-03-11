@@ -1,0 +1,31 @@
+AppBundle\Entity\Category:
+    type: entity
+    table: category
+    repositoryClass: AppBundle\Entity\Repository\CategoryRepository
+    uniqueConstraints:
+        unique_category_name:
+            columns:
+                - name
+    id:
+        id:
+            type: integer
+            nullable: false
+            options:
+                unsigned: false
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        name:
+            type: string
+            nullable: false
+            length: 255
+            options:
+                fixed: false
+        description:
+            type: text
+            nullable: true
+            length: null
+            options:
+                fixed: false
+    lifecycleCallbacks: {  }
