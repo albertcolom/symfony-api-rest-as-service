@@ -10,6 +10,9 @@ class ProductData extends AbstractFixture implements OrderedFixtureInterface
 {
     static public $products;
 
+    /**
+     * {@inheritDoc}
+     */
     public function load(ObjectManager $manager)
     {
         self::$products = [];
@@ -20,6 +23,7 @@ class ProductData extends AbstractFixture implements OrderedFixtureInterface
             $product->setName($value['name']);
             $product->setDescription($value['description']);
             $product->setActive($value['active']);
+            $product->setCategory($this->getReference($value['category']));
             $manager->persist($product);
             $this->addReference($reference, $product);
 
@@ -28,11 +32,17 @@ class ProductData extends AbstractFixture implements OrderedFixtureInterface
         $manager->flush();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function getOrder()
     {
-        return 1;
+        return 2;
     }
 
+    /**
+     * @return array
+     */
     public function getDataArray()
     {
         return
@@ -40,17 +50,20 @@ class ProductData extends AbstractFixture implements OrderedFixtureInterface
             'product-1' => [
                 'name' => 'Product 1',
                 'description' => 'Description 1',
-                'active' => true
+                'active' => true,
+                'category' => 'category-1'
             ],
             'product-2' => [
                 'name' => 'Product 2',
                 'description' => 'Description 2',
-                'active' => false
+                'active' => false,
+                'category' => 'category-2'
             ],
             'product-3' => [
                 'name' => 'Product 3',
                 'description' => 'Description 3',
-                'active' => true
+                'active' => true,
+                'category' => 'category-2'
             ]
         ];
     }
