@@ -2,8 +2,10 @@
 
 namespace AppBundle\Tests\Controller\v1;
 
+use AppBundle\Entity\Category;
 use AppBundle\Entity\Product;
 use AppBundle\Application\Test\ControllerTestCase;
+use AppBundle\Tests\Fixtures\Entity\CategoryData;
 use AppBundle\Tests\Fixtures\Entity\ProductData;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -46,10 +48,22 @@ class ProductRESTControllerTest extends ControllerTestCase
 
     public function testJsonPostProductActionShouldCreateWithHeaderLocation()
     {
-        $new = '{"name":"name post","description":"description post","active":true}';
+        $fixtures = ['AppBundle\Tests\Fixtures\Entity\CategoryData'];
+        $this->loadFixtures($fixtures);
+
+        $categories = CategoryData::$categories;
+        /** @var $category Category */
+        $category = end($categories);
+
+        $new = [
+            'name' => 'name post',
+            'description' => 'description post',
+            'active' => true,
+            'category' => $category->getId()
+        ];
 
         $route = $this->getUrl('api_v1_post_product');
-        $this->client->request('POST', $route, [], [], $this->getJsonHeaders(), $new);
+        $this->client->request('POST', $route, [], [], $this->getJsonHeaders(), json_encode($new));
 
         $this->assertStatusCode(Response::HTTP_CREATED, $this->client);
 
@@ -59,9 +73,7 @@ class ProductRESTControllerTest extends ControllerTestCase
         $this->assertStatusCode(Response::HTTP_OK, $this->client);
         $content = $this->client->getResponse()->getContent();
 
-        $new = $this->addJsonValue($new, ['id' => $this->getValueFromJson($content,'id')]);
-
-        $this->assertEquals($content, $new);
+        $this->assertEquals($new['name'], $this->getValueFromJson($content,'name'));
     }
 
     public function testJsonPutProductActionShouldModifyWithHeaderLocation()
@@ -109,7 +121,11 @@ class ProductRESTControllerTest extends ControllerTestCase
      */
     public function prepareFixtures()
     {
-        $fixtures = array('AppBundle\Tests\Fixtures\Entity\ProductData');
+        $fixtures = [
+            'AppBundle\Tests\Fixtures\Entity\CategoryData',
+            'AppBundle\Tests\Fixtures\Entity\ProductData'
+        ];
+
         $this->loadFixtures($fixtures);
         return ProductData::$products;
     }
