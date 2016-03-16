@@ -1,0 +1,6 @@
+AppBundle\Entity\Category:
+    properties:
+        name:
+            - NotBlank: ~
+            - NotNull: ~
+            - Length: { min: 2, max: 255 }
