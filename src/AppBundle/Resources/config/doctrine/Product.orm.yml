@@ -37,5 +37,6 @@ AppBundle\Entity\Product:
             joinColumns:
                 category_id:
                     referencedColumnName: id
+                    onDelete: "SET NULL"
             orphanRemoval: false
     lifecycleCallbacks: {  }
