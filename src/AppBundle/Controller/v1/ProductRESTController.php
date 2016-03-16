@@ -85,7 +85,7 @@ class ProductRESTController extends BaseRESTBundle
      */
     public function postAction(Request $request)
     {
-        return $this->post(new Product(), ProductType::class, $request);
+        return $this->post(new Product(), ProductType::class, $request, 'api_v1_get_product');
     }
 
     /**
@@ -109,7 +109,7 @@ class ProductRESTController extends BaseRESTBundle
      */
     public function putAction(Request $request, Product $entity)
     {
-        return $this->put($entity, ProductType::class, $request);
+        return $this->put($entity, ProductType::class, $request, 'api_v1_get_product');
     }
 
     /**

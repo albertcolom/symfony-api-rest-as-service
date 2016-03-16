@@ -40,25 +40,29 @@ class BaseRESTBundle extends FOSRestController
         return $this->view(null, Response::HTTP_NO_CONTENT);
     }
 
-    public function post($entity, $formType, Request $request)
+    public function post($entity, $formType, Request $request, $redirect = null)
     {
-        try {
+        return $this->saveData('POST', $entity, $formType, $request, $redirect, Response::HTTP_CREATED);
 
-            $data =  $this->processForm($entity, $formType, $request, 'POST');
-            return $this->routeRedirectView('api_v1_get_product', ['entity'=>$data->getId()], Response::HTTP_CREATED);
-
-        } catch (InvalidFormException $exception) {
-
-            return $exception->getForm();
-        }
     }
 
-    public function put($entity, $formType, Request $request)
+    public function put($entity, $formType, Request $request, $redirect = null)
+    {
+        return $this->saveData('PUT', $entity, $formType, $request, $redirect, Response::HTTP_NO_CONTENT);
+
+    }
+
+    public function saveData($type, $entity, $formType, Request $request, $redirect, $HttpResponse)
     {
         try {
 
-            $data =  $this->processForm($entity, $formType, $request, 'PUT');
-            return $this->routeRedirectView('api_v1_get_product', ['entity'=>$data->getId()], Response::HTTP_NO_CONTENT);
+            $data =  $this->processForm($entity, $formType, $request, $type);
+
+            if($redirect) {
+                return $this->routeRedirectView($redirect, ['entity'=>$data->getId()], $HttpResponse);
+            }else{
+                return $entity;
+            }
 
         } catch (InvalidFormException $exception) {
 
