@@ -3,10 +3,15 @@ AppBundle\Entity\Product:
     properties:
         id:
             type: integer
+            groups: [Default]
         name:
             type: string
+            groups: [Default]
         description:
             type: string
+            groups: [Default]
         active:
             type: boolean
+            groups: [Default]
         category:
+            groups: [Default]

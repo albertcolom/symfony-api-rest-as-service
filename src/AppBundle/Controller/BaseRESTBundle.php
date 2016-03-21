@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use Doctrine\ORM\Mapping\Entity;
+use JMS\Serializer\SerializationContext;
 use Symfony\Component\Form\FormTypeInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -16,7 +17,7 @@ class BaseRESTBundle extends FOSRestController
 
     public function get($entity)
     {
-        return $entity;
+        return $this->view($entity)->setSerializationContext($this->getSerializationContext());
     }
 
     public function cget(Request $request, ParamFetcherInterface $paramFetcher, $entity)
@@ -94,6 +95,15 @@ class BaseRESTBundle extends FOSRestController
             throw new NotFoundHttpException('Not Found');
         }
 
-        return $this->view($content);
+        return $this->view($content)->setSerializationContext($this->getSerializationContext());
+    }
+
+    public function getSerializationContext()
+    {
+        $context = new SerializationContext();
+        $groups[] = 'Default';
+        $context->setGroups($groups);
+
+        return $context;
     }
 }

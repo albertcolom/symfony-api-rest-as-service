@@ -3,7 +3,10 @@ AppBundle\Entity\Category:
     properties:
         id:
             type: integer
+            groups: [Default]
         name:
             type: string
+            groups: [Default]
         description:
             type: string
+            groups: [Default]
