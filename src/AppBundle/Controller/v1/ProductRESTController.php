@@ -32,6 +32,8 @@ class ProductRESTController extends BaseRESTBundle
      *  }
      * )
      *
+     * @Annotations\QueryParam(name="fields", nullable=true, array=true, description="Fields to return. Must be an array ie. &fields[entityA]=id,name&fields[entityB]=id")
+     *
      * @param Product $entity
      * @return Response
      */
@@ -55,7 +57,7 @@ class ProductRESTController extends BaseRESTBundle
      * @Annotations\QueryParam(name="offset", requirements="\d+", default=0, nullable=true, description="Offset from which to start listing pages ie. offset=1")
      * @Annotations\QueryParam(name="limit", requirements="\d+", default="5", description="How many pages to return ie. limit=20")
      * @Annotations\QueryParam(name="sort", nullable=true, array=true, description="Order by fields. Must be an array ie. &sort[name]=ASC&sort[description]=DESC")
-     *
+     * @Annotations\QueryParam(name="fields", nullable=true, array=true, description="Fields to return. Must be an array ie. &fields[entityA]=id,name&fields[entityB]=id")
      *
      * @param Request $request
      * @param ParamFetcherInterface $paramFetcher

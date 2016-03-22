@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Application\Serializer\FieldsListExclusionStrategy;
 use Doctrine\ORM\Mapping\Entity;
 use JMS\Serializer\SerializationContext;
 use Symfony\Component\Form\FormTypeInterface;
@@ -14,6 +15,7 @@ use AppBundle\Exception\InvalidFormException;
 
 class BaseRESTBundle extends FOSRestController
 {
+    private $fields = [];
 
     public function get($entity)
     {
@@ -26,6 +28,8 @@ class BaseRESTBundle extends FOSRestController
         $offset = $paramFetcher->get('offset');
         $limit = $paramFetcher->get('limit');
         $sort = $paramFetcher->get('sort');
+
+        $this->fields = $paramFetcher->get('fields');
 
         $result = $this->getDoctrine()->getRepository($entity)->findBy(array(), $sort, $limit, $offset);
 
@@ -103,6 +107,8 @@ class BaseRESTBundle extends FOSRestController
         $context = new SerializationContext();
         $groups[] = 'Default';
         $context->setGroups($groups);
+
+        $context->addExclusionStrategy(new FieldsListExclusionStrategy($this->fields));
 
         return $context;
     }
