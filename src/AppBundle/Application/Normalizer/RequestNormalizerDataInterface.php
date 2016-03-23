@@ -23,4 +23,9 @@ interface RequestNormalizerDataInterface
      * @return array
      */
     public function getFields();
+
+    /**
+     * @return array
+     */
+    public function getGroups();
 }

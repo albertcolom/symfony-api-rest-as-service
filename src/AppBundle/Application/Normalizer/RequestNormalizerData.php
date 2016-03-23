@@ -24,12 +24,18 @@ class RequestNormalizerData implements RequestNormalizerDataInterface
      */
     private $fields;
 
-    public function __construct($offset, $limit, array $sort, array $fields)
+    /**
+     * @var array
+     */
+    private $groups;
+
+    public function __construct($offset, $limit, array $sort, array $fields, array $groups)
     {
         $this->offset = $offset;
         $this->limit = $limit;
         $this->sort = $sort;
         $this->fields = $fields;
+        $this->groups = $groups;
     }
 
     /**
@@ -62,5 +68,13 @@ class RequestNormalizerData implements RequestNormalizerDataInterface
     public function getLimit()
     {
         return $this->limit;
+    }
+
+    /**
+     * @return array
+     */
+    public function getGroups()
+    {
+        return $this->groups;
     }
 }

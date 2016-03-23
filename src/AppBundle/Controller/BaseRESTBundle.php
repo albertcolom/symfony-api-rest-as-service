@@ -2,10 +2,10 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Application\Normalizer\RequestNormalizerData;
+use AppBundle\Application\Normalizer\RequestNormalizer;
 use AppBundle\Application\Serializer\FieldsListExclusionStrategy;
-use Doctrine\ORM\Mapping\Entity;
 use JMS\Serializer\SerializationContext;
-use Symfony\Component\Form\FormTypeInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use FOS\RestBundle\Controller\FOSRestController;
@@ -15,25 +15,22 @@ use AppBundle\Exception\InvalidFormException;
 
 class BaseRESTBundle extends FOSRestController
 {
-    private $fields = [];
-
-    public function get($entity)
+    public function sget($entity, ParamFetcherInterface $paramFetcher)
     {
-        return $this->view($entity)->setSerializationContext($this->getSerializationContext());
+        $normalizedData = $this->getRequestNormalizeData($paramFetcher->all());
+
+        return $this->view($entity)->setSerializationContext($this->getSerializationContext($normalizedData));
     }
 
     public function cget(Request $request, ParamFetcherInterface $paramFetcher, $entity)
     {
+        $normalizedData = $this->getRequestNormalizeData($paramFetcher->all());
 
-        $offset = $paramFetcher->get('offset');
-        $limit = $paramFetcher->get('limit');
-        $sort = $paramFetcher->get('sort');
+        $result = $this->getDoctrine()
+            ->getRepository($entity)
+            ->findBy([], $normalizedData->getSort(), $normalizedData->getLimit(), $normalizedData->getOffset());
 
-        $this->fields = $paramFetcher->get('fields');
-
-        $result = $this->getDoctrine()->getRepository($entity)->findBy(array(), $sort, $limit, $offset);
-
-        return $this->getViewContent($result);
+        return $this->getViewResultSerializationContext($result, $normalizedData);
     }
 
     public function delete($entity)
@@ -48,13 +45,11 @@ class BaseRESTBundle extends FOSRestController
     public function post($entity, $formType, Request $request, $redirect = null)
     {
         return $this->saveData('POST', $entity, $formType, $request, $redirect, Response::HTTP_CREATED);
-
     }
 
     public function put($entity, $formType, Request $request, $redirect = null)
     {
         return $this->saveData('PUT', $entity, $formType, $request, $redirect, Response::HTTP_NO_CONTENT);
-
     }
 
     public function saveData($type, $entity, $formType, Request $request, $redirect, $HttpResponse)
@@ -93,23 +88,30 @@ class BaseRESTBundle extends FOSRestController
         throw new InvalidFormException('Invalid submitted data', Response::HTTP_BAD_REQUEST, $form);
     }
 
-    public function getViewContent($content)
+    public function getViewResultSerializationContext($content, RequestNormalizerData $normalizedData)
     {
         if (empty($content)) {
             throw new NotFoundHttpException('Not Found');
         }
 
-        return $this->view($content)->setSerializationContext($this->getSerializationContext());
+        return $this->view($content)->setSerializationContext($this->getSerializationContext($normalizedData));
     }
 
-    public function getSerializationContext()
+    public function getSerializationContext(RequestNormalizerData $normalizedData)
     {
         $context = new SerializationContext();
-        $groups[] = 'Default';
-        $context->setGroups($groups);
-
-        $context->addExclusionStrategy(new FieldsListExclusionStrategy($this->fields));
+        $context->setGroups($normalizedData->getGroups());
+        $context->addExclusionStrategy(new FieldsListExclusionStrategy($normalizedData->getFields()));
 
         return $context;
+    }
+
+    public function getRequestNormalizeData(array $params)
+    {
+        $requestNormalize = new RequestNormalizer();
+        /** @var RequestNormalizerData $normalize */
+        $normalize = $requestNormalize->normalize($params);
+
+        return $normalize;
     }
 }
