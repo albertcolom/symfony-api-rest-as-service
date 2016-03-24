@@ -51,6 +51,29 @@ class CategoryRESTControllerTest extends ControllerTestCase
         $this->assertEquals($new['name'], $this->getValueFromJson($content,'name'));
     }
 
+    public function testJsonPutCategoryActionShouldModifyWithHeaderLocation()
+    {
+        $categories = $this->prepareFixtures();
+        /** @var  $category Category */
+        $category = end($categories);
+
+        $modify = '{"name":"category test put"}';
+
+        $route = $this->getUrl('api_v1_put_category', ['entity'=>$category->getId()]);
+        $this->client->request('PUT', $route, [], [], $this->getJsonHeaders(), $modify);
+
+        $this->assertStatusCode(Response::HTTP_NO_CONTENT, $this->client);
+
+        $head_location = $this->client->getResponse()->headers->get('location');
+        $this->client->request('GET', $head_location, [], [], $this->getJsonHeaders());
+
+        $this->assertStatusCode(Response::HTTP_OK, $this->client);
+        $content = $this->client->getResponse()->getContent();
+
+        $this->assertEquals($this->getValueFromJson($content,'id'), $category->getId());
+        $this->assertEquals($this->getValueFromJson($modify,'name'), $this->getValueFromJson($content,'name'));
+    }
+
     public function testJsonGetCategoriesAction()
     {
         $categories = $this->prepareFixtures();
