@@ -27,7 +27,7 @@ class RequestNormalizer implements RequestNormalizeInterface
     /**
      * @var array
      */
-    private $goups;
+    private $groups;
 
     public function __construct()
     {
@@ -35,7 +35,7 @@ class RequestNormalizer implements RequestNormalizeInterface
         $this->limit = 20;
         $this->sort = [];
         $this->fields = [];
-        $this->goups = ['Default'];
+        $this->groups = ['Default'];
     }
 
     /**
@@ -48,8 +48,9 @@ class RequestNormalizer implements RequestNormalizeInterface
         $this->limit = $this->checkAndGet($params, 'limit', $this->limit);
         $this->fields = $this->checkAndGet($params, 'fields', $this->fields);
         $this->sort = $this->normalizeSort($this->checkAndGet($params, 'sort', $this->sort));
+        $this->groups = $this->checkAndGet($params, 'groups', $this->groups);
 
-        return new RequestNormalizerData($this->offset, $this->limit, $this->sort, $this->fields, $this->goups);
+        return new RequestNormalizerData($this->offset, $this->limit, $this->sort, $this->fields, $this->groups);
     }
 
     /**
