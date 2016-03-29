@@ -8,15 +8,29 @@ abstract class ControllerTestCase extends WebTestCase
 {
     const HTTP_HOST = 'localhost';
 
-    /** @var \Symfony\Bundle\FrameworkBundle\Client */
+    /**
+     * @var  \Symfony\Bundle\FrameworkBundle\Client
+     */
     protected $client;
 
+    /**
+     * @inheritdoc
+     */
     public function setUp()
     {
         parent::setUp();
         $this->client = static::createClient(array(), array(
             'HTTP_HOST' => self::HTTP_HOST,
         ));
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function tearDown()
+    {
+        parent::tearDown();
+        unset($this->client);
     }
 
     /**
@@ -51,11 +65,5 @@ abstract class ControllerTestCase extends WebTestCase
         $decode = json_decode($json, true);
         $merge = array_merge($array, $decode);
         return json_encode($merge);
-    }
-
-    public function tearDown()
-    {
-        parent::tearDown();
-        unset($this->client);
     }
 }

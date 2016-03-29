@@ -1,3 +1,11 @@
 services:
     util.inflector:
       class: AppBundle\Util\Inflector\NoPluralize
+
+    app.request.normalize.sort:
+      class: AppBundle\Application\Normalizer\NormalizeSort
+      public: false
+
+    app.request.normalize:
+      class: AppBundle\Application\Normalizer\RequestNormalizer
+      arguments: ['@app.request.normalize.sort']

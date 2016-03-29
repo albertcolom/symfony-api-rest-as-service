@@ -5,6 +5,11 @@ namespace AppBundle\Application\Normalizer;
 class RequestNormalizer implements RequestNormalizeInterface
 {
     /**
+     * @var NormalizeSort
+     */
+    private $normalizeSort;
+
+    /**
      * @var int
      */
     private $offset;
@@ -29,8 +34,14 @@ class RequestNormalizer implements RequestNormalizeInterface
      */
     private $groups;
 
-    public function __construct()
+    /**
+     * RequestNormalizer constructor.
+     * @param NormalizeSort $normalizeSort
+     */
+    public function __construct(NormalizeSort $normalizeSort)
     {
+        $this->normalizeSort = $normalizeSort;
+
         $this->offset = 0;
         $this->limit = 20;
         $this->sort = [];
@@ -47,26 +58,10 @@ class RequestNormalizer implements RequestNormalizeInterface
         $this->offset = $this->checkAndGet($params, 'offset', $this->offset);
         $this->limit = $this->checkAndGet($params, 'limit', $this->limit);
         $this->fields = $this->checkAndGet($params, 'fields', $this->fields);
-        $this->sort = $this->normalizeSort($this->checkAndGet($params, 'sort', $this->sort));
+        $this->sort = $this->normalizeSort->normalize($this->checkAndGet($params, 'sort', $this->sort));
         $this->groups = $this->checkAndGet($params, 'groups', $this->groups);
 
         return new RequestNormalizerData($this->offset, $this->limit, $this->sort, $this->fields, $this->groups);
-    }
-
-    /**
-     * @param null $sortFields
-     * @return array
-     */
-    private function normalizeSort($sortFields = null)
-    {
-        $sort = [];
-        if($sortFields || !is_array($sortFields)) {
-            foreach(explode(',', $sortFields) as $val){
-                $key = preg_replace("/[^A-Za-z0-9]/", '', $val);
-                $sort[$key] = strpos($val, '-', 0)=== 0 ? 'DESC' : 'ASC';
-            }
-        }
-        return $sort;
     }
 
     /**

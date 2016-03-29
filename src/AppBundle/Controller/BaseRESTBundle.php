@@ -108,10 +108,11 @@ class BaseRESTBundle extends FOSRestController
 
     public function getRequestNormalizeData(array $params)
     {
-        $requestNormalize = new RequestNormalizer();
-        /** @var RequestNormalizerData $normalize */
-        $normalize = $requestNormalize->normalize($params);
+        /** @var $normalizer RequestNormalizer */
+        $normalizer = $this->container->get('app.request.normalize');
+        /** @var RequestNormalizerData $normalizeData */
+        $normalizeData = $normalizer->normalize($params);
 
-        return $normalize;
+        return $normalizeData;
     }
 }
