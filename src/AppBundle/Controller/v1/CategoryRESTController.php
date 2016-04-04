@@ -2,6 +2,8 @@
 
 namespace AppBundle\Controller\v1;
 
+use AppBundle\Application\Rest\v1\RestBase;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use AppBundle\Entity\Category;
@@ -17,7 +19,7 @@ use FOS\RestBundle\Controller\Annotations;
  * Category controller.
  * @RouteResource("Category")
  */
-class CategoryRESTController extends BaseRESTBundle
+class CategoryRESTController extends Controller
 {
     /**
      *
@@ -39,7 +41,9 @@ class CategoryRESTController extends BaseRESTBundle
      */
     public function getAction(Category $entity, ParamFetcherInterface $paramFetcher)
     {
-        return $this->sget($entity, $paramFetcher);
+        /** @var $base RestBase */
+        $base = $this->container->get('app.rest.base');
+        return $base->get($entity, $paramFetcher->all());
     }
 
     /**
@@ -59,13 +63,14 @@ class CategoryRESTController extends BaseRESTBundle
      * @Annotations\QueryParam(name="sort", nullable=true,  description="JsonApi: Order by fields ie. &sort=-field1,field2 (-field1: DESC | field2: ASC)")
      * @Annotations\QueryParam(name="fields", nullable=true, array=true, description="Fields to return. Must be an array ie. &fields[entityA]=id,name&fields[entityB]=id")
      *
-     * @param Request $request
      * @param ParamFetcherInterface $paramFetcher
      * @return Response
      */
-    public function cgetAction(Request $request, ParamFetcherInterface $paramFetcher)
+    public function cgetAction(ParamFetcherInterface $paramFetcher)
     {
-        return $this->cget($request, $paramFetcher, Category::class);
+        /** @var $base RestBase */
+        $base = $this->container->get('app.rest.base');
+        return $base->getCollection(Category::class, $paramFetcher->all());
     }
 
 
@@ -87,7 +92,9 @@ class CategoryRESTController extends BaseRESTBundle
      */
     public function postAction(Request $request)
     {
-        return $this->post(new Category(), CategoryType::class, $request, 'api_v1_get_category');
+        /** @var $base RestBase */
+        $base = $this->container->get('app.rest.base');
+        return $base->post(new Category(), CategoryType::class, $request, 'api_v1_get_category');
     }
 
     /**
@@ -111,7 +118,9 @@ class CategoryRESTController extends BaseRESTBundle
      */
     public function putAction(Request $request, Category $entity)
     {
-        return $this->put($entity, CategoryType::class, $request, 'api_v1_get_category');
+        /** @var $base RestBase */
+        $base = $this->container->get('app.rest.base');
+        return $base->put($entity, CategoryType::class, $request, 'api_v1_get_category');
     }
 
     /**
@@ -154,6 +163,8 @@ class CategoryRESTController extends BaseRESTBundle
      */
     public function deleteAction(Category $entity)
     {
-        return $this->delete($entity);
+        /** @var $base RestBase */
+        $base = $this->container->get('app.rest.base');
+        return $base->delete($entity);
     }
 }
