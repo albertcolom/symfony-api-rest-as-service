@@ -9,11 +9,14 @@ use JMS\Serializer\Context;
 
 class FieldsListExclusionStrategy implements ExclusionStrategyInterface
 {
+    /**
+     * @var array
+     */
     private $fields;
 
-    public function __construct(array $fields)
+    public function __construct()
     {
-        $this->fields = $fields;
+        $this->fields = [];
     }
 
     /**
@@ -61,5 +64,21 @@ class FieldsListExclusionStrategy implements ExclusionStrategyInterface
             return in_array($propertyName, $fields);
         }
         return false;
+    }
+
+    /**
+     * @return array
+     */
+    public function getFields()
+    {
+        return $this->fields;
+    }
+
+    /**
+     * @param array $fields
+     */
+    public function setFields(array $fields)
+    {
+        $this->fields = $fields;
     }
 }

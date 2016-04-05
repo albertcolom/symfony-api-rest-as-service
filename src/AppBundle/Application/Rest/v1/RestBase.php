@@ -35,12 +35,24 @@ class RestBase implements RestBaseInterface
      */
     private $formFactory;
 
-    public function __construct(EntityManager $em, View $view, RequestNormalizer $normalizer, FormFactory $formFactory)
+    /**
+     * @var FieldsListExclusionStrategy
+     */
+    private $fieldsListExclusionStrategy;
+
+    /**
+     * @var SerializationContext
+     */
+    private $serializerContext;
+
+    public function __construct(EntityManager $em,View $view, RequestNormalizer $normalizer, FormFactory $formFactory, FieldsListExclusionStrategy $fieldsListExclusionStrategy, SerializationContext $serializerContext)
     {
         $this->em = $em;
         $this->view = $view;
         $this->normalizer = $normalizer;
         $this->formFactory = $formFactory;
+        $this->fieldsListExclusionStrategy = $fieldsListExclusionStrategy;
+        $this->serializerContext = $serializerContext;
     }
 
     /**
@@ -170,16 +182,16 @@ class RestBase implements RestBaseInterface
     }
 
     /**
-     * @todo Implements as service
      * @param RequestNormalizerData $normalizedData
      * @return SerializationContext
      */
     public function getSerializationContext(RequestNormalizerData $normalizedData)
     {
-        $context = new SerializationContext();
-        $context->setGroups($normalizedData->getGroups());
-        $context->addExclusionStrategy(new FieldsListExclusionStrategy($normalizedData->getFields()));
+        $this->fieldsListExclusionStrategy->setFields($normalizedData->getFields());
 
-        return $context;
+        $this->serializerContext->setGroups($normalizedData->getGroups());
+        $this->serializerContext->addExclusionStrategy($this->fieldsListExclusionStrategy);
+
+        return $this->serializerContext;
     }
 }

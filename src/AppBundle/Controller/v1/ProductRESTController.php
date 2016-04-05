@@ -2,11 +2,12 @@
 
 namespace AppBundle\Controller\v1;
 
+use AppBundle\Application\Rest\v1\RestBase;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use AppBundle\Entity\Product;
 use AppBundle\Form\ProductType;
-use AppBundle\Controller\BaseRESTBundle;
 
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use FOS\RestBundle\Request\ParamFetcherInterface;
@@ -17,7 +18,7 @@ use FOS\RestBundle\Controller\Annotations;
  * Product controller.
  * @RouteResource("Product")
  */
-class ProductRESTController extends BaseRESTBundle
+class ProductRESTController extends Controller
 {
     /**
      *
@@ -39,7 +40,9 @@ class ProductRESTController extends BaseRESTBundle
      */
     public function getAction(Product $entity, ParamFetcherInterface $paramFetcher)
     {
-        return $this->sget($entity, $paramFetcher);
+        /** @var $base RestBase */
+        $base = $this->container->get('app.rest.base');
+        return $base->get($entity, $paramFetcher->all());
     }
 
     /**
@@ -59,13 +62,14 @@ class ProductRESTController extends BaseRESTBundle
      * @Annotations\QueryParam(name="sort", nullable=true,  description="JsonApi: Order by fields ie. &sort=-field1,field2 (-field1: DESC | field2: ASC)")
      * @Annotations\QueryParam(name="fields", nullable=true, array=true, description="JsonApi: Fields to return. Must be an array ie. &fields[entityA]=id,name&fields[entityB]=id")
      *
-     * @param Request $request
      * @param ParamFetcherInterface $paramFetcher
      * @return Response
      */
-    public function cgetAction(Request $request, ParamFetcherInterface $paramFetcher)
+    public function cgetAction(ParamFetcherInterface $paramFetcher)
     {
-        return $this->cget($request, $paramFetcher, Product::class);
+        /** @var $base RestBase */
+        $base = $this->container->get('app.rest.base');
+        return $base->getCollection(Product::class, $paramFetcher->all());
     }
 
 
@@ -87,7 +91,9 @@ class ProductRESTController extends BaseRESTBundle
      */
     public function postAction(Request $request)
     {
-        return $this->post(new Product(), ProductType::class, $request, 'api_v1_get_product');
+        /** @var $base RestBase */
+        $base = $this->container->get('app.rest.base');
+        return $base->post(new Product(), ProductType::class, $request, 'api_v1_get_product');
     }
 
     /**
@@ -111,7 +117,8 @@ class ProductRESTController extends BaseRESTBundle
      */
     public function putAction(Request $request, Product $entity)
     {
-        return $this->put($entity, ProductType::class, $request, 'api_v1_get_product');
+        $base = $this->container->get('app.rest.base');
+        return $base->put($entity, ProductType::class, $request, 'api_v1_get_product');
     }
 
     /**
@@ -154,6 +161,8 @@ class ProductRESTController extends BaseRESTBundle
      */
     public function deleteAction(Product $entity)
     {
-        return $this->delete($entity);
+        /** @var $base RestBase */
+        $base = $this->container->get('app.rest.base');
+        return $base->delete($entity);
     }
 }
