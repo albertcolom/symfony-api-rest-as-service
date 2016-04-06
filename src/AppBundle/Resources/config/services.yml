@@ -4,7 +4,6 @@ services:
 
     app.request.normalize.sort:
       class: AppBundle\Application\Normalizer\NormalizeSort
-      public: false
 
     app.request.normalize:
       class: AppBundle\Application\Normalizer\RequestNormalizer
@@ -14,6 +13,10 @@ services:
       class: FOS\RestBundle\View\View
       factory: [FOS\RestBundle\View\View, create]
 
+    app.rest.view:
+      class: AppBundle\Application\Rest\v1\RestView
+      arguments: ['@fos_rest.view_handler','@app.fos_rest.view.view']
+
     app.serializer.fields.exclusion:
       class: AppBundle\Application\Serializer\FieldsListExclusionStrategy
 
@@ -22,4 +25,4 @@ services:
 
     app.rest.base:
       class: AppBundle\Application\Rest\v1\RestBase
-      arguments: ['@doctrine.orm.entity_manager','@app.fos_rest.view.view','@app.request.normalize','@form.factory','@app.serializer.fields.exclusion','@app.jms.serializer.context']
+      arguments: ['@doctrine.orm.entity_manager','@app.rest.view','@app.request.normalize','@form.factory','@app.serializer.fields.exclusion','@app.jms.serializer.context']

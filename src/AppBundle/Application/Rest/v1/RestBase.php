@@ -21,14 +21,14 @@ class RestBase implements RestBaseInterface
     private $em;
 
     /**
-     * @var View
+     * @var RestView
      */
-    private $view;
+    private $restView;
 
     /**
      * @var RequestNormalizer
      */
-    private $normalizer;
+    private $requestNormalizer;
 
     /**
      * @var FormFactory
@@ -45,11 +45,11 @@ class RestBase implements RestBaseInterface
      */
     private $serializerContext;
 
-    public function __construct(EntityManager $em,View $view, RequestNormalizer $normalizer, FormFactory $formFactory, FieldsListExclusionStrategy $fieldsListExclusionStrategy, SerializationContext $serializerContext)
+    public function __construct(EntityManager $em, RestView $restView, RequestNormalizer $requestNormalizer, FormFactory $formFactory, FieldsListExclusionStrategy $fieldsListExclusionStrategy, SerializationContext $serializerContext)
     {
         $this->em = $em;
-        $this->view = $view;
-        $this->normalizer = $normalizer;
+        $this->restView = $restView;
+        $this->requestNormalizer = $requestNormalizer;
         $this->formFactory = $formFactory;
         $this->fieldsListExclusionStrategy = $fieldsListExclusionStrategy;
         $this->serializerContext = $serializerContext;
@@ -61,8 +61,8 @@ class RestBase implements RestBaseInterface
     public function get($entity, array $params)
     {
         /** @var $normalizedData RequestNormalizerData */
-        $normalizedData = $this->getRequestNormalizeData($params);
-        return $this->createView($entity)->setSerializationContext($this->getSerializationContext($normalizedData));
+        $normalizedData = $this->requestNormalizer->normalize($params);
+        return $this->restView->createView($entity)->setSerializationContext($this->getSerializationContext($normalizedData));
     }
 
     /**
@@ -71,12 +71,12 @@ class RestBase implements RestBaseInterface
     public function getCollection($entity, array $params)
     {
         /** @var $normalizedData RequestNormalizerData */
-        $normalizedData = $this->getRequestNormalizeData($params);
+        $normalizedData = $this->requestNormalizer->normalize($params);
 
         $result =$this->em->getRepository($entity)
             ->findBy([], $normalizedData->getSort(), $normalizedData->getLimit(), $normalizedData->getOffset());
 
-        return $this->createView($result)->setSerializationContext($this->getSerializationContext($normalizedData));
+        return $this->restView->createView($result)->setSerializationContext($this->getSerializationContext($normalizedData));
     }
 
     /**
@@ -103,7 +103,7 @@ class RestBase implements RestBaseInterface
         $this->em->remove($entity);
         $this->em->flush();
 
-        return $this->createView(null, Response::HTTP_NO_CONTENT);
+        return $this->restView->createView(null, Response::HTTP_NO_CONTENT);
     }
 
     /**
@@ -121,7 +121,7 @@ class RestBase implements RestBaseInterface
             $data =  $this->processForm($entity, $formType, $request, $type);
 
             if($redirect) {
-                return $this->createRedirect($redirect, ['entity'=>$data->getId()], $HttpResponse);
+                return $this->restView->createRedirect($redirect, ['entity'=>$data->getId()], $HttpResponse);
             }else{
                 return $entity;
             }
@@ -154,31 +154,6 @@ class RestBase implements RestBaseInterface
         }
 
         throw new InvalidFormException('Invalid submitted data', Response::HTTP_BAD_REQUEST, $form);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function createView($data = null, $statusCode = null, array $headers = [])
-    {
-        return $this->view->create($data, $statusCode, $headers);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function createRedirect($route, array $parameters = [], $statusCode = Response::HTTP_FOUND, array $headers = [])
-    {
-        return $this->view->createRouteRedirect($route, $parameters, $statusCode, $headers);
-    }
-
-    /**
-     * @param array $params
-     * @return RequestNormalizerData
-     */
-    public function getRequestNormalizeData(array $params)
-    {
-        return $this->normalizer->normalize($params);
     }
 
     /**
