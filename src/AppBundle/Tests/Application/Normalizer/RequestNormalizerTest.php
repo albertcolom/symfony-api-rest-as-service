@@ -9,23 +9,19 @@ use AppBundle\Application\Normalizer\RequestNormalizerData;
 class RequestNormalizerTest extends \PHPUnit_Framework_TestCase
 {
     /** @var  RequestNormalizer */
-    private $normalizer;
+    private $requestNormalizer;
 
     /**
      * {@inheritdoc}
      */
     public function setUp()
     {
-        $sortMock = $this->getMock(NormalizeSort::class);
-        $sortMock
-            ->expects($this->any())
-            ->method('normalize')
-            ->will($this->returnValue([]));
+        $sortMock = $this->getMockNormalizeSort();
 
-        /* @todo Implement with a Mock */
+        /* @todo Need implement with a Mock */
         $requestNormalizerData = new RequestNormalizerData();
 
-        $this->normalizer = new RequestNormalizer($sortMock, $requestNormalizerData);
+        $this->requestNormalizer = new RequestNormalizer($sortMock, $requestNormalizerData);
     }
 
     /**
@@ -33,12 +29,12 @@ class RequestNormalizerTest extends \PHPUnit_Framework_TestCase
      */
     public function tearDown()
     {
-        unset($this->normalizer);
+        unset($this->requestNormalizer);
     }
 
     public function testRequestNormalizerDefaultValues()
     {
-        $data = $this->normalizer->normalize([]);
+        $data = $this->requestNormalizer->normalize([]);
 
         $this->assertEquals($data->getOffset(), 0);
         $this->assertEquals($data->getLimit(), 20);
@@ -49,25 +45,39 @@ class RequestNormalizerTest extends \PHPUnit_Framework_TestCase
 
     public function testNormalizeOffset()
     {
-        $data = $this->normalizer->normalize(['offset' => 10]);
+        $data = $this->requestNormalizer->normalize(['offset' => 10]);
         $this->assertEquals($data->getOffset(), 10);
     }
 
     public function testRequestNormalizerLimit()
     {
-        $data = $this->normalizer->normalize(['limit' => 50]);
+        $data = $this->requestNormalizer->normalize(['limit' => 50]);
         $this->assertEquals($data->getLimit(), 50);
     }
 
     public function testRequestNormalizerFields()
     {
-        $data = $this->normalizer->normalize(['fields'=>['foo' => 'bar']]);
+        $data = $this->requestNormalizer->normalize(['fields'=>['foo' => 'bar']]);
         $this->assertEquals($data->getFields(), ['foo' => 'bar']);
     }
 
     public function testRequestNormalizerGroups()
     {
-        $data = $this->normalizer->normalize(['groups'=>['foo','bar']]);
+        $data = $this->requestNormalizer->normalize(['groups'=>['foo','bar']]);
         $this->assertEquals($data->getGroups(), ['foo','bar']);
+    }
+
+    private function getMockNormalizeSort()
+    {
+        $sortMock = $this->getMockBuilder(NormalizeSort::class)
+            ->setMethods(['normalize'])
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $sortMock->expects($this->any())
+            ->method('normalize')
+            ->will($this->returnValue([]));
+
+        return $sortMock;
     }
 }
