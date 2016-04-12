@@ -4,6 +4,7 @@ namespace AppBundle\Tests\Application\Normalizer;
 
 use AppBundle\Application\Normalizer\RequestNormalizer;
 use AppBundle\Application\Normalizer\NormalizeSort;
+use AppBundle\Application\Normalizer\RequestNormalizerData;
 
 class RequestNormalizerTest extends \PHPUnit_Framework_TestCase
 {
@@ -21,7 +22,10 @@ class RequestNormalizerTest extends \PHPUnit_Framework_TestCase
             ->method('normalize')
             ->will($this->returnValue([]));
 
-        $this->normalizer = new RequestNormalizer($sortMock);
+        /* @todo Implement with a Mock */
+        $requestNormalizerData = new RequestNormalizerData();
+
+        $this->normalizer = new RequestNormalizer($sortMock, $requestNormalizerData);
     }
 
     /**

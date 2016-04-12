@@ -16,37 +16,50 @@ class RequestNormalizeDataTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->requestNormalizeData = new RequestNormalizerData(2, 50, ['foo'=>'ASC'], ['entity'=>'foo,bar'], ['Default']);
+        $this->requestNormalizeData = new RequestNormalizerData();
     }
 
     public function tearDown()
     {
-        parent::tearDown();
         unset($this->requestNormalizeData);
     }
 
-    public function testGetOffset()
+    public function testRequestNormalizerDataDefaultValues()
     {
+        $this->assertEquals($this->requestNormalizeData->getOffset(), 0);
+        $this->assertEquals($this->requestNormalizeData->getLimit(), 20);
+        $this->assertEquals($this->requestNormalizeData->getFields(), []);
+        $this->assertEquals($this->requestNormalizeData->getSort(), []);
+        $this->assertEquals($this->requestNormalizeData->getGroups(), ['Default']);
+    }
+
+    public function testSetGetOffset()
+    {
+        $this->requestNormalizeData->setOffset(2);
         $this->assertEquals($this->requestNormalizeData->getOffset(), 2);
     }
 
-    public function testGetLimit()
+    public function testSetGetLimit()
     {
+        $this->requestNormalizeData->setLimit(50);
         $this->assertEquals($this->requestNormalizeData->getLimit(), 50);
     }
 
-    public function testGetSort()
+    public function testSetGetSort()
     {
+        $this->requestNormalizeData->setSort(['foo'=>'ASC']);
         $this->assertEquals($this->requestNormalizeData->getSort(), ['foo'=>'ASC']);
     }
 
-    public function testGetFields()
+    public function testSetGetFields()
     {
+        $this->requestNormalizeData->setFields(['entity'=>'foo,bar']);
         $this->assertEquals($this->requestNormalizeData->getFields(), ['entity'=>'foo,bar']);
     }
 
     public function testGetGroups()
     {
+        $this->requestNormalizeData->setGroups(['Default']);
         $this->assertEquals($this->requestNormalizeData->getGroups(), ['Default']);
     }
 }

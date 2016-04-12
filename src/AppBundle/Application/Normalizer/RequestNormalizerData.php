@@ -4,6 +4,12 @@ namespace AppBundle\Application\Normalizer;
 
 class RequestNormalizerData implements RequestNormalizerDataInterface
 {
+    const OFFSET = 0;
+    const LIMIT = 20;
+    const SORT = [];
+    const FIELDS = [];
+    const GROUPS = ['Default'];
+
     /**
      * @var int
      */
@@ -29,17 +35,17 @@ class RequestNormalizerData implements RequestNormalizerDataInterface
      */
     private $groups;
 
-    public function __construct($offset, $limit, array $sort, array $fields, array $groups)
+    public function __construct()
     {
-        $this->offset = $offset;
-        $this->limit = $limit;
-        $this->sort = $sort;
-        $this->fields = $fields;
-        $this->groups = $groups;
+        $this->offset = self::OFFSET;
+        $this->limit = self::LIMIT;
+        $this->sort = self::SORT;
+        $this->fields = self::FIELDS;
+        $this->groups = self::GROUPS;
     }
 
     /**
-     * @return int
+     * {@inheritdoc}
      */
     public function getOffset()
     {
@@ -47,23 +53,15 @@ class RequestNormalizerData implements RequestNormalizerDataInterface
     }
 
     /**
-     * @return array
+     * {@inheritdoc}
      */
-    public function getFields()
+    public function setOffset($offset)
     {
-        return $this->fields;
+        $this->offset = $offset;
     }
 
     /**
-     * @return array
-     */
-    public function getSort()
-    {
-        return $this->sort;
-    }
-
-    /**
-     * @return int
+     * {@inheritdoc}
      */
     public function getLimit()
     {
@@ -71,10 +69,58 @@ class RequestNormalizerData implements RequestNormalizerDataInterface
     }
 
     /**
-     * @return array
+     * {@inheritdoc}
+     */
+    public function setLimit($limit)
+    {
+        $this->limit = $limit;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSort()
+    {
+        return $this->sort;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setSort(array $sort)
+    {
+        $this->sort = $sort;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getFields()
+    {
+        return $this->fields;
+    }
+
+    /**
+     * @param array $fields
+     */
+    public function setFields(array $fields)
+    {
+        $this->fields = $fields;
+    }
+
+    /**
+     * {@inheritdoc}
      */
     public function getGroups()
     {
         return $this->groups;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setGroups(array $groups)
+    {
+        $this->groups = $groups;
     }
 }

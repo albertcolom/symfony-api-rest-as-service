@@ -10,67 +10,47 @@ class RequestNormalizer implements RequestNormalizeInterface
     private $normalizeSort;
 
     /**
-     * @var int
+     * @var RequestNormalizerData
      */
-    private $offset;
+    private $requestNormalizerData;
 
-    /**
-     * @var int
-     */
-    private $limit;
-
-    /**
-     * @var array
-     */
-    private $sort;
-
-    /**
-     * @var array
-     */
-    private $fields;
-
-    /**
-     * @var array
-     */
-    private $groups;
-
-    /**
-     * RequestNormalizer constructor.
-     * @param NormalizeSort $normalizeSort
-     */
-    public function __construct(NormalizeSort $normalizeSort)
+    public function __construct(NormalizeSort $normalizeSort, RequestNormalizerData $requestNormalizerData)
     {
         $this->normalizeSort = $normalizeSort;
-
-        $this->offset = 0;
-        $this->limit = 20;
-        $this->sort = [];
-        $this->fields = [];
-        $this->groups = ['Default'];
+        $this->requestNormalizerData = $requestNormalizerData;
     }
 
     /**
-     * @param array $params
-     * @return RequestNormalizerData
+     * {@inheritdoc}
      */
     public function normalize(array $params)
     {
-        $this->offset = $this->checkAndGet($params, 'offset', $this->offset);
-        $this->limit = $this->checkAndGet($params, 'limit', $this->limit);
-        $this->fields = $this->checkAndGet($params, 'fields', $this->fields);
-        $this->sort = $this->normalizeSort->normalize($this->checkAndGet($params, 'sort', $this->sort));
-        $this->groups = $this->checkAndGet($params, 'groups', $this->groups);
+        $offsetData = $this->checkAndGet($params, 'offset', requestNormalizerData::OFFSET);
+        $this->requestNormalizerData->setOffset($offsetData);
 
-        return new RequestNormalizerData($this->offset, $this->limit, $this->sort, $this->fields, $this->groups);
+        $limitData = $this->checkAndGet($params, 'limit', requestNormalizerData::LIMIT);
+        $this->requestNormalizerData->setLimit($limitData);
+
+        $fieldsData = $this->checkAndGet($params, 'fields', requestNormalizerData::FIELDS);
+        $this->requestNormalizerData->setFields($fieldsData);
+
+        $sortData = $this->checkAndGet($params, 'sort', requestNormalizerData::SORT);
+        $sortNormalizer = $this->normalizeSort->normalize($sortData);
+        $this->requestNormalizerData->setSort($sortNormalizer);
+
+        $groupsData = $this->checkAndGet($params, 'groups', requestNormalizerData::GROUPS);
+        $this->requestNormalizerData->setGroups($groupsData);
+
+        return $this->requestNormalizerData;
     }
 
     /**
-     * @param $param
-     * @param $index
-     * @param $default
-     * @return mixed
+     * @param array $param
+     * @param string $index
+     * @param string $default
+     * @return string
      */
-    private function checkAndGet($param, $index, $default)
+    private function checkAndGet(array $param, $index, $default)
     {
         if (isset($param[$index]) && $param[$index] != null) {
             return $param[$index];
