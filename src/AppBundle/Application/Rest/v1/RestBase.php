@@ -5,7 +5,7 @@ namespace AppBundle\Application\Rest\v1;
 use AppBundle\Application\Normalizer\RequestNormalizer;
 use AppBundle\Application\Normalizer\RequestNormalizerData;
 use AppBundle\Application\Serializer\FieldsListExclusionStrategy;
-use AppBundle\Exception\InvalidFormException;
+use AppBundle\Application\Exception\InvalidFormException;
 use Doctrine\ORM\EntityManager;
 use FOS\RestBundle\View\View;
 use JMS\Serializer\SerializationContext;

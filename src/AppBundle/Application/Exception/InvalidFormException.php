@@ -1,5 +1,5 @@
 <?php
-namespace AppBundle\Exception;
+namespace AppBundle\Application\Exception;
 
 /**
  * @author Albert Colom <skolom@gmail.com>
