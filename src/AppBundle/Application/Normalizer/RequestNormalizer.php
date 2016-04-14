@@ -2,6 +2,9 @@
 
 namespace AppBundle\Application\Normalizer;
 
+use AppBundle\Application\Exception\InvalidTypeException;
+use Symfony\Component\HttpFoundation\Response;
+
 /**
  * @author Albert Colom <skolom@gmail.com>
  */
@@ -73,8 +76,8 @@ class RequestNormalizer implements RequestNormalizeInterface
      */
     private function checkExpectedType($var, $expectedType)
     {
-        if (gettype($var) !== $expectedType) {
-            throw new \Exception('Error '.$var.' type: '.gettype($var). ' expcted: '.$expectedType);
+        if (strtolower(gettype($var)) !== strtolower($expectedType)) {
+            throw new InvalidTypeException('Invalid submitted data type', Response::HTTP_BAD_REQUEST, $var, $expectedType);
         }
 
         return true;

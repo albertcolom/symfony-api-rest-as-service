@@ -5,11 +5,11 @@ namespace AppBundle\Application\Exception;
 /**
  * @author Albert Colom <skolom@gmail.com>
  */
-class InvalidFormException extends \RuntimeException
+class InvalidFormException extends \RuntimeException implements InvalidFormExceptionInterface
 {
     protected $form;
 
-    /**z
+    /**
      * @param string $message
      * @param int $code
      * @param null $form
@@ -21,7 +21,7 @@ class InvalidFormException extends \RuntimeException
     }
 
     /**
-     * @return array|null
+     * {@inheritdoc}
      */
     public function getForm()
     {
