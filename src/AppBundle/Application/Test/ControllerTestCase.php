@@ -6,6 +6,7 @@ use Liip\FunctionalTestBundle\Test\WebTestCase;
 
 abstract class ControllerTestCase extends WebTestCase
 {
+    use UtilTestTrait;
     const HTTP_HOST = 'localhost';
 
     /**
