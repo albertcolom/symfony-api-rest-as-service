@@ -6,6 +6,9 @@ use FOS\RestBundle\View\View;
 use FOS\RestBundle\View\ViewHandler;
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * @author Albert Colom <skolom@gmail.com>
+ */
 class RestView
 {
     /**

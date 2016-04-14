@@ -6,6 +6,9 @@ use Liip\FunctionalTestBundle\Test\WebTestCase;
 use JMS\Serializer\SerializerInterface;
 use JMS\Serializer\SerializationContext;
 
+/**
+ * @author Albert Colom <skolom@gmail.com>
+ */
 abstract class SerializerTestCase extends WebTestCase
 {
     /**

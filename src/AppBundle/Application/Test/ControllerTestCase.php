@@ -4,6 +4,9 @@ namespace AppBundle\Application\Test;
 
 use Liip\FunctionalTestBundle\Test\WebTestCase;
 
+/**
+ * @author Albert Colom <skolom@gmail.com>
+ */
 abstract class ControllerTestCase extends WebTestCase
 {
     use UtilTestTrait;

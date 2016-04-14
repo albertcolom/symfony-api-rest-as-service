@@ -2,6 +2,9 @@
 
 namespace AppBundle\Application\Test;
 
+/**
+ * @author Albert Colom <skolom@gmail.com>
+ */
 trait UtilTestTrait
 {
     /**

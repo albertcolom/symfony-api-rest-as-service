@@ -5,6 +5,9 @@ namespace AppBundle\Application\Rest\v1;
 use FOS\RestBundle\View\View;
 use Symfony\Component\HttpFoundation\Request;
 
+/**
+ * @author Albert Colom <skolom@gmail.com>
+ */
 interface RestBaseInterface
 {
 

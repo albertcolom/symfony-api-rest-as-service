@@ -2,6 +2,9 @@
 
 namespace AppBundle\Application\Normalizer;
 
+/**
+ * @author Albert Colom <skolom@gmail.com>
+ */
 class RequestNormalizerData implements RequestNormalizerDataInterface
 {
     const OFFSET = 0;
@@ -101,7 +104,7 @@ class RequestNormalizerData implements RequestNormalizerDataInterface
     }
 
     /**
-     * @param array $fields
+     * {@inheritdoc}
      */
     public function setFields(array $fields)
     {

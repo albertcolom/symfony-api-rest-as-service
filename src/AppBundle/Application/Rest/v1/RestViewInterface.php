@@ -5,6 +5,9 @@ namespace AppBundle\Application\Rest\v1;
 use FOS\RestBundle\View\View;
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * @author Albert Colom <skolom@gmail.com>
+ */
 interface RestViewInterface
 {
     /**

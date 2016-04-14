@@ -7,6 +7,9 @@ use JMS\Serializer\Metadata\ClassMetadata;
 use JMS\Serializer\Metadata\PropertyMetadata;
 use JMS\Serializer\Context;
 
+/**
+ * @author Albert Colom <skolom@gmail.com>
+ */
 class FieldsListExclusionStrategy implements ExclusionStrategyInterface
 {
     /**

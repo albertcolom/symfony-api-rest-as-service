@@ -1,12 +1,14 @@
 <?php
 namespace AppBundle\Exception;
 
+/**
+ * @author Albert Colom <skolom@gmail.com>
+ */
 class InvalidFormException extends \RuntimeException
 {
     protected $form;
 
     /**
-     * InvalidFormException constructor.
      * @param string $message
      * @param int $code
      * @param null $form

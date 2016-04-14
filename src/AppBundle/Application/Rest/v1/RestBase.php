@@ -13,6 +13,9 @@ use Symfony\Component\Form\FormFactory;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * @author Albert Colom <skolom@gmail.com>
+ */
 class RestBase implements RestBaseInterface
 {
     /**

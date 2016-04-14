@@ -2,6 +2,9 @@
 
 namespace AppBundle\Application\Normalizer;
 
+/**
+ * @author Albert Colom <skolom@gmail.com>
+ */
 interface NormalizeSortInterface
 {
     /**
