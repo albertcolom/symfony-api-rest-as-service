@@ -3,11 +3,12 @@
 namespace AppBundle\Tests\Application\Normalizer;
 
 use AppBundle\Application\Normalizer\NormalizeSort;
+use AppBundle\Application\Test\BaseTestCase;
 
 /**
  * @group Normalize
  */
-class NormalizeSortTest extends \PHPUnit_Framework_TestCase
+class NormalizeSortTest extends BaseTestCase
 {
     /**
      * @var NormalizeSort

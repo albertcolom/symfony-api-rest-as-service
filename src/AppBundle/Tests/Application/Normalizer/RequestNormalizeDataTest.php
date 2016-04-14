@@ -3,11 +3,12 @@
 namespace AppBundle\Tests\Application\Normalizer;
 
 use AppBundle\Application\Normalizer\RequestNormalizerData;
+use AppBundle\Application\Test\BaseTestCase;
 
 /**
  * @group Normalize
  */
-class RequestNormalizeDataTest extends \PHPUnit_Framework_TestCase
+class RequestNormalizeDataTest extends BaseTestCase
 {
     /**
      * @var RequestNormalizerData

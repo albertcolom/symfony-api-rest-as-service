@@ -5,8 +5,9 @@ namespace AppBundle\Tests\Application\Normalizer;
 use AppBundle\Application\Normalizer\RequestNormalizer;
 use AppBundle\Application\Normalizer\NormalizeSort;
 use AppBundle\Application\Normalizer\RequestNormalizerData;
+use AppBundle\Application\Test\BaseTestCase;
 
-class RequestNormalizerTest extends \PHPUnit_Framework_TestCase
+class RequestNormalizerTest extends BaseTestCase
 {
     /** @var  RequestNormalizer */
     private $requestNormalizer;
@@ -16,10 +17,13 @@ class RequestNormalizerTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $sortMock = $this->getMockNormalizeSort();
+        $sortMock = $this->getMockBuilder(NormalizeSort::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        /* @todo Need implement with a Mock */
-        $requestNormalizerData = new RequestNormalizerData();
+        $requestNormalizerData = $this->getMockBuilder(RequestNormalizerData::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->requestNormalizer = new RequestNormalizer($sortMock, $requestNormalizerData);
     }
@@ -32,52 +36,44 @@ class RequestNormalizerTest extends \PHPUnit_Framework_TestCase
         unset($this->requestNormalizer);
     }
 
-    public function testRequestNormalizerDefaultValues()
+    /**
+     * @dataProvider providerCheckAndGet
+     */
+    public function testGetAndCheckValue($params, $index, $default, $expected)
     {
-        $data = $this->requestNormalizer->normalize([]);
-
-        $this->assertEquals($data->getOffset(), 0);
-        $this->assertEquals($data->getLimit(), 20);
-        $this->assertEquals($data->getFields(), []);
-        $this->assertEquals($data->getSort(), []);
-        $this->assertEquals($data->getGroups(), ['Default']);
+        $getVar = $this->getPrivateMethod($this->requestNormalizer, 'checkAndGet', [$params, $index, $default]);
+        $this->assertEquals($getVar, $expected);
     }
 
-    public function testNormalizeOffset()
+    public function providerCheckAndGet()
     {
-        $data = $this->requestNormalizer->normalize(['offset' => 10]);
-        $this->assertEquals($data->getOffset(), 10);
+        return [
+            [['foo' => 'bar'], 'foo', 'bar', 'bar'],
+            [['foo' => 'bar'], 'foz', 'foobar', 'foobar'],
+            [['foo' => 'bar'], 'foz', '', null],
+            [['foo'], 0, '', 'foo'],
+            [[], '', '', null],
+        ];
     }
 
-    public function testRequestNormalizerLimit()
+    /**
+     * @dataProvider providerExpectedType
+     */
+    public function testCheckExpectedType($var, $expectedType)
     {
-        $data = $this->requestNormalizer->normalize(['limit' => 50]);
-        $this->assertEquals($data->getLimit(), 50);
+        $checkType = $this->getPrivateMethod($this->requestNormalizer, 'checkExpectedType', [$var, $expectedType]);
+        $this->assertTrue($checkType);
     }
 
-    public function testRequestNormalizerFields()
+    public function providerExpectedType()
     {
-        $data = $this->requestNormalizer->normalize(['fields'=>['foo' => 'bar']]);
-        $this->assertEquals($data->getFields(), ['foo' => 'bar']);
-    }
-
-    public function testRequestNormalizerGroups()
-    {
-        $data = $this->requestNormalizer->normalize(['groups'=>['foo','bar']]);
-        $this->assertEquals($data->getGroups(), ['foo','bar']);
-    }
-
-    private function getMockNormalizeSort()
-    {
-        $sortMock = $this->getMockBuilder(NormalizeSort::class)
-            ->setMethods(['normalize'])
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $sortMock->expects($this->any())
-            ->method('normalize')
-            ->will($this->returnValue([]));
-
-        return $sortMock;
+        return [
+            ['foobar', 'string'],
+            [1, 'integer'],
+            [1.1, 'double'],
+            [['foobar'], 'array'],
+            [true, 'boolean'],
+            [null, 'NULL'],
+        ];
     }
 }

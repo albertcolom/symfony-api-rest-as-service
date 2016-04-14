@@ -26,12 +26,15 @@ class RequestNormalizer implements RequestNormalizeInterface
     public function normalize(array $params)
     {
         $offsetData = $this->checkAndGet($params, 'offset', requestNormalizerData::OFFSET);
+        $this->checkExpectedType($offsetData, 'integer');
         $this->requestNormalizerData->setOffset($offsetData);
 
         $limitData = $this->checkAndGet($params, 'limit', requestNormalizerData::LIMIT);
+        $this->checkExpectedType($limitData, 'integer');
         $this->requestNormalizerData->setLimit($limitData);
 
         $fieldsData = $this->checkAndGet($params, 'fields', requestNormalizerData::FIELDS);
+        $this->checkExpectedType($fieldsData, 'array');
         $this->requestNormalizerData->setFields($fieldsData);
 
         $sortData = $this->checkAndGet($params, 'sort', requestNormalizerData::SORT);
@@ -39,6 +42,7 @@ class RequestNormalizer implements RequestNormalizeInterface
         $this->requestNormalizerData->setSort($sortNormalizer);
 
         $groupsData = $this->checkAndGet($params, 'groups', requestNormalizerData::GROUPS);
+        $this->checkExpectedType($groupsData, 'array');
         $this->requestNormalizerData->setGroups($groupsData);
 
         return $this->requestNormalizerData;
@@ -50,11 +54,26 @@ class RequestNormalizer implements RequestNormalizeInterface
      * @param string $default
      * @return string
      */
-    private function checkAndGet(array $param, $index, $default)
+    private function checkAndGet(array $param, $index, $default = null)
     {
         if (isset($param[$index]) && $param[$index] != null) {
             return $param[$index];
         }
         return $default;
+    }
+
+    /**
+     * @param $var
+     * @param $expectedType
+     * @return bool
+     * @throws \Exception
+     */
+    private function checkExpectedType($var, $expectedType)
+    {
+        if (gettype($var) !== $expectedType) {
+            throw new \Exception('Error '.$var.' type: '.gettype($var). ' expcted: '.$expectedType);
+        }
+
+        return true;
     }
 }
