@@ -41,7 +41,7 @@ class RequestNormalizerTest extends BaseTestCase
      */
     public function testGetAndCheckValue($params, $index, $default, $expected)
     {
-        $getVar = $this->getPrivateMethod($this->requestNormalizer, 'checkAndGet', [$params, $index, $default]);
+        $getVar = $this->invokePrivateMethod($this->requestNormalizer, 'checkAndGet', [$params, $index, $default]);
         $this->assertEquals($getVar, $expected);
     }
 
@@ -61,7 +61,7 @@ class RequestNormalizerTest extends BaseTestCase
      */
     public function testCheckExpectedType($var, $expectedType)
     {
-        $checkType = $this->getPrivateMethod($this->requestNormalizer, 'checkExpectedType', [$var, $expectedType]);
+        $checkType = $this->invokePrivateMethod($this->requestNormalizer, 'checkExpectedType', [$var, $expectedType]);
         $this->assertTrue($checkType);
     }
 

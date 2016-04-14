@@ -13,7 +13,7 @@ trait UtilTestTrait
      * @param array $parameters
      * @return mixed
      */
-    public function getPrivateMethod($object, $methodName, array $parameters = [])
+    public function invokePrivateMethod($object, $methodName, array $parameters = [])
     {
         $reflection = new \ReflectionClass(get_class($object));
         $method = $reflection->getMethod($methodName);
