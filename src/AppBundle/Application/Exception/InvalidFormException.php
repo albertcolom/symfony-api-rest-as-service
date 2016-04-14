@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Application\Exception;
 
 /**
@@ -8,13 +9,14 @@ class InvalidFormException extends \RuntimeException
 {
     protected $form;
 
-    /**
+    /**z
      * @param string $message
+     * @param int $code
      * @param null $form
      */
-    public function __construct($message, $form = null)
+    public function __construct($message, $code = 0, $form = null)
     {
-        parent::__construct($message);
+        parent::__construct($message, $code);
         $this->form = $form;
     }
 
