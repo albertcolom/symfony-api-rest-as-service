@@ -8,17 +8,17 @@ namespace AppBundle\Application\Exception;
 interface InvalidTypeExceptionInterface
 {
     /**
-     * @return string|null
+     * @return string
      */
     public function getVar();
 
     /**
-     * @return string|null
+     * @return string
      */
     public function getType();
 
     /**
-     * @return string|null
+     * @return string
      */
     public function getExpectedType();
 }

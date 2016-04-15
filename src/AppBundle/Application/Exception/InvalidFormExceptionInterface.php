@@ -8,7 +8,7 @@ namespace AppBundle\Application\Exception;
 interface InvalidFormExceptionInterface
 {
     /**
-     * @return array|null
+     * @return array
      */
     public function getForm();
 }
