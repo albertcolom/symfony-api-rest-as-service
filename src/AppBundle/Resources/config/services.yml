@@ -5,12 +5,15 @@ services:
     app.request.normalize.sort:
       class: AppBundle\Application\Normalizer\NormalizeSort
 
+    app.request.normalize.type:
+      class: AppBundle\Application\Normalizer\NormalizeType
+
     app.request.normalize.data:
       class: AppBundle\Application\Normalizer\RequestNormalizerData
 
     app.request.normalize:
       class: AppBundle\Application\Normalizer\RequestNormalizer
-      arguments: ['@app.request.normalize.sort','@app.request.normalize.data']
+      arguments: ['@app.request.normalize.sort', '@app.request.normalize.type','@app.request.normalize.data']
 
     app.fos_rest.view.view:
       class: FOS\RestBundle\View\View

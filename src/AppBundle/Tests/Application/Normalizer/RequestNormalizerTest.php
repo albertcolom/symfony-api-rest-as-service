@@ -2,7 +2,7 @@
 
 namespace AppBundle\Tests\Application\Normalizer;
 
-use AppBundle\Application\Exception\InvalidTypeException;
+use AppBundle\Application\Normalizer\NormalizeType;
 use AppBundle\Application\Normalizer\RequestNormalizer;
 use AppBundle\Application\Normalizer\NormalizeSort;
 use AppBundle\Application\Normalizer\RequestNormalizerData;
@@ -10,7 +10,9 @@ use AppBundle\Application\Test\BaseTestCase;
 
 class RequestNormalizerTest extends BaseTestCase
 {
-    /** @var  RequestNormalizer */
+    /**
+     * @var RequestNormalizer
+     */
     private $requestNormalizer;
 
     /**
@@ -22,11 +24,15 @@ class RequestNormalizerTest extends BaseTestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $typeMock = $this->getMockBuilder(NormalizeType::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $requestNormalizerData = $this->getMockBuilder(RequestNormalizerData::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->requestNormalizer = new RequestNormalizer($sortMock, $requestNormalizerData);
+        $this->requestNormalizer = new RequestNormalizer($sortMock, $typeMock, $requestNormalizerData);
     }
 
     /**
@@ -54,45 +60,6 @@ class RequestNormalizerTest extends BaseTestCase
             [['foo' => 'bar'], 'foz', '', null],
             [['foo'], 0, '', 'foo'],
             [[], '', '', null],
-        ];
-    }
-
-    /**
-     * @dataProvider providerExpectedValidType
-     */
-    public function testCheckExpectedValidType($var, $expectedType)
-    {
-        $checkType = $this->invokePrivateMethod($this->requestNormalizer, 'checkExpectedType', [$var, $expectedType]);
-        $this->assertTrue($checkType);
-    }
-
-    public function providerExpectedValidType()
-    {
-        return [
-            ['foobar', 'string'],
-            [1, 'integer'],
-            [1.1, 'double'],
-            [['foobar'], 'array'],
-            [true, 'boolean'],
-            [null, 'null'],
-        ];
-    }
-
-    /**
-     * @dataProvider providerExpectedInvalidType
-     */
-    public function testCheckInvalidTypeException($var, $expectedType)
-    {
-        $this->expectException(InvalidTypeException::class);
-        $this->invokePrivateMethod($this->requestNormalizer, 'checkExpectedType', [$var, $expectedType]);
-    }
-
-    public function providerExpectedInvalidType()
-    {
-        return [
-            [1, 'string'],
-            ['1', 'integer'],
-            ['foobar', 'bar'],
         ];
     }
 }

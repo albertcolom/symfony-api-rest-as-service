@@ -17,7 +17,7 @@ class InvalidTypeExceptionTest extends BaseTestCase
      */
     public function setUp()
     {
-        $this->invalidTypeException = new InvalidTypeException('Foo message', 0, 'foo', 'bar');
+        $this->invalidTypeException = new InvalidTypeException('Foo message', 0, 'foo', ['bar','foo']);
     }
 
     /**
@@ -40,6 +40,6 @@ class InvalidTypeExceptionTest extends BaseTestCase
 
     public function testGetExpectedType()
     {
-        $this->assertEquals($this->invalidTypeException->getExpectedType(), 'bar');
+        $this->assertEquals($this->invalidTypeException->getExpectedType(), 'bar,foo');
     }
 }

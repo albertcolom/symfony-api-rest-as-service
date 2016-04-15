@@ -2,9 +2,6 @@
 
 namespace AppBundle\Application\Normalizer;
 
-use AppBundle\Application\Exception\InvalidTypeException;
-use Symfony\Component\HttpFoundation\Response;
-
 /**
  * @author Albert Colom <skolom@gmail.com>
  */
@@ -16,14 +13,20 @@ class RequestNormalizer implements RequestNormalizeInterface
     private $normalizeSort;
 
     /**
+     * @var
+     */
+    private $normalizeType;
+
+    /**
      * @var RequestNormalizerData
      */
     private $requestNormalizerData;
 
-    public function __construct(NormalizeSort $normalizeSort, RequestNormalizerData $requestNormalizerData)
+    public function __construct(NormalizeSort $normalizeSort, NormalizeType $normalizeType, RequestNormalizerData $requestNormalizerData)
     {
         $this->normalizeSort = $normalizeSort;
         $this->requestNormalizerData = $requestNormalizerData;
+        $this->normalizeType = $normalizeType;
     }
 
     /**
@@ -31,27 +34,54 @@ class RequestNormalizer implements RequestNormalizeInterface
      */
     public function normalize(array $params)
     {
-        $offsetData = $this->checkAndGet($params, 'offset', requestNormalizerData::OFFSET);
-        $this->checkExpectedType($offsetData, 'integer');
-        $this->requestNormalizerData->setOffset($offsetData);
-
-        $limitData = $this->checkAndGet($params, 'limit', requestNormalizerData::LIMIT);
-        $this->checkExpectedType($limitData, 'integer');
-        $this->requestNormalizerData->setLimit($limitData);
-
-        $fieldsData = $this->checkAndGet($params, 'fields', requestNormalizerData::FIELDS);
-        $this->checkExpectedType($fieldsData, 'array');
-        $this->requestNormalizerData->setFields($fieldsData);
-
-        $sortData = $this->checkAndGet($params, 'sort', requestNormalizerData::SORT);
-        $sortNormalizer = $this->normalizeSort->normalize($sortData);
-        $this->requestNormalizerData->setSort($sortNormalizer);
-
-        $groupsData = $this->checkAndGet($params, 'groups', requestNormalizerData::GROUPS);
-        $this->checkExpectedType($groupsData, 'array');
-        $this->requestNormalizerData->setGroups($groupsData);
+        $this->normalizeOffset($params);
+        $this->normalizeLimit($params);
+        $this->normalizeSort($params);
+        $this->normalizeGroups($params);
 
         return $this->requestNormalizerData;
+    }
+
+    /**
+     * @param array $params
+     */
+    private function normalizeOffset(array $params)
+    {
+        $offsetData = $this->checkAndGet($params, 'offset', requestNormalizerData::OFFSET);
+        $offsetDataType = $this->normalizeType->setVarType($offsetData, 'integer');
+        $this->normalizeType->checkExpectedType($offsetDataType, 'integer');
+        $this->requestNormalizerData->setOffset($offsetDataType);
+    }
+
+    /**
+     * @param array $params
+     */
+    private function normalizeLimit(array $params)
+    {
+        $fieldsData = $this->checkAndGet($params, 'fields', requestNormalizerData::FIELDS);
+        $this->normalizeType->checkExpectedType($fieldsData, 'array');
+        $this->requestNormalizerData->setFields($fieldsData);
+    }
+
+    /**
+     * @param array $params
+     */
+    private function normalizeSort(array $params)
+    {
+        $sortData = $this->checkAndGet($params, 'sort', requestNormalizerData::SORT);
+        $sortNormalizer = $this->normalizeSort->normalize($sortData);
+        $this->normalizeType->checkExpectedType($sortNormalizer, 'array');
+        $this->requestNormalizerData->setSort($sortNormalizer);
+    }
+
+    /**
+     * @param array $params
+     */
+    private function normalizeGroups(array $params)
+    {
+        $groupsData = $this->checkAndGet($params, 'groups', requestNormalizerData::GROUPS);
+        $this->normalizeType->checkExpectedType($groupsData, 'array');
+        $this->requestNormalizerData->setGroups($groupsData);
     }
 
     /**
@@ -66,20 +96,5 @@ class RequestNormalizer implements RequestNormalizeInterface
             return $param[$index];
         }
         return $default;
-    }
-
-    /**
-     * @param $var
-     * @param $expectedType
-     * @return bool
-     * @throws \Exception
-     */
-    private function checkExpectedType($var, $expectedType)
-    {
-        if (strtolower(gettype($var)) !== strtolower($expectedType)) {
-            throw new InvalidTypeException('Invalid submitted data type', Response::HTTP_BAD_REQUEST, $var, $expectedType);
-        }
-
-        return true;
     }
 }

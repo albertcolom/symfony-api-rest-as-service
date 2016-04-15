@@ -11,7 +11,7 @@ class InvalidTypeException extends \RuntimeException implements InvalidTypeExcep
     protected $type;
     protected $expectedType;
 
-    public function __construct($message, $code = 0, $var = null, $expectedType = null)
+    public function __construct($message, $code = 0, $var = null, $expectedType = [])
     {
         parent::__construct($message, $code);
         $this->var = $var;
@@ -40,6 +40,7 @@ class InvalidTypeException extends \RuntimeException implements InvalidTypeExcep
      */
     public function getExpectedType()
     {
-        return $this->expectedType;
+        if (!is_array($this->expectedType)) $this->expectedType = (array)$this->expectedType;
+        return implode("," ,$this->expectedType);
     }
 }
