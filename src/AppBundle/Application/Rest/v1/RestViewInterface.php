@@ -17,15 +17,15 @@ interface RestViewInterface
     public function handler(View $view);
 
     /**
-     * @param null $data
-     * @param null $statusCode
+     * @param mixed $data
+     * @param int $statusCode
      * @param array $headers
      * @return View
      */
     public function createView($data = null, $statusCode = null, array $headers = []);
 
     /**
-     * @param $route
+     * @param string $route
      * @param array $parameters
      * @param int $statusCode
      * @param array $headers

@@ -5,24 +5,24 @@ namespace AppBundle\Application\Normalizer;
 /**
  * @author Albert Colom <skolom@gmail.com>
  */
-class RequestNormalizer implements RequestNormalizeInterface
+class RequestNormalizer implements RequestNormalizerInterface
 {
     /**
-     * @var NormalizeSort
+     * @var NormalizeSortInterface
      */
     private $normalizeSort;
 
     /**
-     * @var
+     * @var NormalizeTypeInterface
      */
     private $normalizeType;
 
     /**
-     * @var RequestNormalizerData
+     * @var RequestNormalizerDataInterface
      */
     private $requestNormalizerData;
 
-    public function __construct(NormalizeSort $normalizeSort, NormalizeType $normalizeType, RequestNormalizerData $requestNormalizerData)
+    public function __construct(NormalizeSortInterface $normalizeSort, NormalizeTypeInterface $normalizeType, RequestNormalizerDataInterface $requestNormalizerData)
     {
         $this->normalizeSort = $normalizeSort;
         $this->requestNormalizerData = $requestNormalizerData;

@@ -3,16 +3,16 @@
 namespace AppBundle\Application\Rest\v1;
 
 use FOS\RestBundle\View\View;
-use FOS\RestBundle\View\ViewHandler;
+use FOS\RestBundle\View\ViewHandlerInterface;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @author Albert Colom <skolom@gmail.com>
  */
-class RestView
+class RestView implements RestViewInterface
 {
     /**
-     * @var ViewHandler
+     * @var ViewHandlerInterface
      */
     private $viewHandler;
 
@@ -21,7 +21,7 @@ class RestView
      */
     private $view;
 
-    public function __construct(ViewHandler $viewHandler, View $view)
+    public function __construct(ViewHandlerInterface $viewHandler, View $view)
     {
         $this->viewHandler = $viewHandler;
         $this->view = $view;

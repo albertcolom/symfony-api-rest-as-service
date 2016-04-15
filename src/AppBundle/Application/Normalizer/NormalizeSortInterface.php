@@ -8,8 +8,8 @@ namespace AppBundle\Application\Normalizer;
 interface NormalizeSortInterface
 {
     /**
-     * @param $data
+     * @param string $data
      * @return array
      */
-    public function normalize($data);
+    public function normalize($data = null);
 }

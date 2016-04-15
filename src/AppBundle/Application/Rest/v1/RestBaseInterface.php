@@ -29,7 +29,7 @@ interface RestBaseInterface
      * @param $entity
      * @param $formType
      * @param Request $request
-     * @param null $redirect
+     * @param string $redirect
      * @return array|View|null
      */
     public function post($entity, $formType, Request $request, $redirect = null);
@@ -38,7 +38,7 @@ interface RestBaseInterface
      * @param $entity
      * @param $formType
      * @param Request $request
-     * @param null $redirect
+     * @param string $redirect
      * @return array|View|null
      */
     public function put($entity, $formType, Request $request, $redirect = null);

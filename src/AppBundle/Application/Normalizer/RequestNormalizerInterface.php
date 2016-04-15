@@ -5,7 +5,7 @@ namespace AppBundle\Application\Normalizer;
 /**
  * @author Albert Colom <skolom@gmail.com>
  */
-interface RequestNormalizeInterface
+interface RequestNormalizerInterface
 {
     /**
      * @param array $data

@@ -2,14 +2,14 @@
 
 namespace AppBundle\Application\Rest\v1;
 
-use AppBundle\Application\Normalizer\RequestNormalizer;
 use AppBundle\Application\Normalizer\RequestNormalizerData;
+use AppBundle\Application\Normalizer\RequestNormalizerInterface;
 use AppBundle\Application\Serializer\FieldsListExclusionStrategy;
 use AppBundle\Application\Exception\InvalidFormException;
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use FOS\RestBundle\View\View;
 use JMS\Serializer\SerializationContext;
-use Symfony\Component\Form\FormFactory;
+use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -19,22 +19,22 @@ use Symfony\Component\HttpFoundation\Response;
 class RestBase implements RestBaseInterface
 {
     /**
-     * @var EntityManager
+     * @var EntityManagerInterface
      */
     private $em;
 
     /**
-     * @var RestView
+     * @var RestViewInterface
      */
     private $restView;
 
     /**
-     * @var RequestNormalizer
+     * @var RequestNormalizerInterface
      */
     private $requestNormalizer;
 
     /**
-     * @var FormFactory
+     * @var FormFactoryInterface
      */
     private $formFactory;
 
@@ -48,7 +48,7 @@ class RestBase implements RestBaseInterface
      */
     private $serializerContext;
 
-    public function __construct(EntityManager $em, RestView $restView, RequestNormalizer $requestNormalizer, FormFactory $formFactory, FieldsListExclusionStrategy $fieldsListExclusionStrategy, SerializationContext $serializerContext)
+    public function __construct(EntityManagerInterface $em, RestViewInterface $restView, RequestNormalizerInterface $requestNormalizer, FormFactoryInterface $formFactory, FieldsListExclusionStrategy $fieldsListExclusionStrategy, SerializationContext $serializerContext)
     {
         $this->em = $em;
         $this->restView = $restView;

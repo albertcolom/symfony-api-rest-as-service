@@ -8,28 +8,28 @@ namespace AppBundle\Application\Normalizer;
 interface NormalizeTypeInterface
 {
     /**
-     * @param $var
-     * @return mixed
+     * @param mixed $var
+     * @return string
      */
     public function getVarType($var);
 
     /**
-     * @param $var
-     * @param $type
+     * @param mixed $var
+     * @param string $type
      * @return mixed
      */
     public function setVarType($var, $type);
 
     /**
-     * @param $var
+     * @param mixed $var
      * @param array|string $expectedTypes
-     * @return mixed
+     * @return bool
      */
     public function checkExpectedType($var, $expectedTypes);
 
     /**
-     * @param $type
-     * @return mixed
+     * @param string $type
+     * @return bool
      */
     public function checkAvailableType($type);
 }
