@@ -31,5 +31,10 @@ interface RestViewInterface
      * @param array $headers
      * @return View
      */
-    public function createRedirect($route, array $parameters = [], $statusCode = Response::HTTP_FOUND, array $headers = []);
+    public function createRedirect(
+        $route,
+        array $parameters = [],
+        $statusCode = Response::HTTP_FOUND,
+        array $headers = []
+    );
 }

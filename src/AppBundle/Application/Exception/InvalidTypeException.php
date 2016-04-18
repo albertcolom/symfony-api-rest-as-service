@@ -40,7 +40,9 @@ class InvalidTypeException extends \RuntimeException implements InvalidTypeExcep
      */
     public function getExpectedType()
     {
-        if (!is_array($this->expectedType)) $this->expectedType = (array)$this->expectedType;
-        return implode("," ,$this->expectedType);
+        if (!is_array($this->expectedType)) {
+            $this->expectedType = (array)$this->expectedType;
+        }
+        return implode(",", $this->expectedType);
     }
 }

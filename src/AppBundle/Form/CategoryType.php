@@ -17,8 +17,7 @@ class CategoryType extends AbstractType
     {
         $builder
             ->add('name')
-            ->add('description')
-        ;
+            ->add('description');
     }
     
     /**
@@ -26,10 +25,10 @@ class CategoryType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(array(
+        $resolver->setDefaults([
             'data_class' => Category::class,
             'csrf_protection' => false
-        ));
+        ]);
     }
 
     public function getBlockPrefix()

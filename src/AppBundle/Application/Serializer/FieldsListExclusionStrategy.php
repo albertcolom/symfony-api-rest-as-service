@@ -62,7 +62,7 @@ class FieldsListExclusionStrategy implements ExclusionStrategyInterface
      */
     public function propertyExists($entityName, $propertyName)
     {
-        if(isset($this->fields[$entityName])) {
+        if (isset($this->fields[$entityName])) {
             $fields = explode(',', $this->fields[$entityName]);
             return in_array($propertyName, $fields);
         }

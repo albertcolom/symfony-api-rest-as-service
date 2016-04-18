@@ -22,8 +22,11 @@ class RequestNormalizer implements RequestNormalizerInterface
      */
     private $requestNormalizerData;
 
-    public function __construct(NormalizeSortInterface $normalizeSort, NormalizeTypeInterface $normalizeType, RequestNormalizerDataInterface $requestNormalizerData)
-    {
+    public function __construct(
+        NormalizeSortInterface $normalizeSort,
+        NormalizeTypeInterface $normalizeType,
+        RequestNormalizerDataInterface $requestNormalizerData
+    ) {
         $this->normalizeSort = $normalizeSort;
         $this->requestNormalizerData = $requestNormalizerData;
         $this->normalizeType = $normalizeType;

@@ -48,7 +48,7 @@ class CategoryRESTControllerTest extends ControllerTestCase
         $this->assertStatusCode(Response::HTTP_OK, $this->client);
         $content = $this->client->getResponse()->getContent();
 
-        $this->assertEquals($new['name'], $this->getValueFromJson($content,'name'));
+        $this->assertEquals($new['name'], $this->getValueFromJson($content, 'name'));
     }
 
     public function testJsonPutCategoryActionShouldModifyWithHeaderLocation()
@@ -70,8 +70,8 @@ class CategoryRESTControllerTest extends ControllerTestCase
         $this->assertStatusCode(Response::HTTP_OK, $this->client);
         $content = $this->client->getResponse()->getContent();
 
-        $this->assertEquals($this->getValueFromJson($content,'id'), $category->getId());
-        $this->assertEquals($this->getValueFromJson($modify,'name'), $this->getValueFromJson($content,'name'));
+        $this->assertEquals($this->getValueFromJson($content, 'id'), $category->getId());
+        $this->assertEquals($this->getValueFromJson($modify, 'name'), $this->getValueFromJson($content, 'name'));
     }
 
     public function testJsonGetCategoriesAction()

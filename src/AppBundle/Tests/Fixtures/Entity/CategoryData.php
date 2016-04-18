@@ -17,8 +17,7 @@ class CategoryData extends AbstractFixture implements OrderedFixtureInterface
     {
         self::$categories = [];
 
-        foreach($this->getDataArray() as $reference => $value) {
-
+        foreach ($this->getDataArray() as $reference => $value) {
             $category = new Category();
             $category->setName($value['name']);
             $category->setDescription($value['description']);

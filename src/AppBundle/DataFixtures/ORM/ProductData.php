@@ -13,8 +13,7 @@ class ProductData extends AbstractFixture implements OrderedFixtureInterface
      */
     public function load(ObjectManager $manager)
     {
-        foreach($this->getDataArray() as $reference => $value) {
-
+        foreach ($this->getDataArray() as $reference => $value) {
             $product = new Product();
             $product->setName($value['name']);
             $product->setDescription($value['description']);

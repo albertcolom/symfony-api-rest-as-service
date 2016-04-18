@@ -34,7 +34,7 @@ class NormalizeSortTest extends BaseTestCase
     public function testNormalizeBlankGetDefaultValue()
     {
         $result = $this->normalizeSort->normalize();
-        $this->assertEquals([],$result);
+        $this->assertEquals([], $result);
     }
 
     public function testSortAsc()

@@ -1,6 +1,7 @@
 <?php
 
 namespace AppBundle\Application\Normalizer;
+
 use AppBundle\Application\Exception\InvalidTypeException;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -51,16 +52,21 @@ class NormalizeType implements NormalizeTypeInterface
     public function checkExpectedType($var, $expectedTypes)
     {
         $equalType = 0;
-        if (!is_array($expectedTypes)) $expectedTypes = (array)$expectedTypes;
-
-        foreach ($expectedTypes as $expectedType){
+        if (!is_array($expectedTypes)) {
+            $expectedTypes = (array)$expectedTypes;
+        }
+        foreach ($expectedTypes as $expectedType) {
             if (strtolower(gettype($var)) == strtolower($expectedType)) {
                 $equalType++;
             }
         }
-
         if ($equalType <= 0) {
-            throw new InvalidTypeException('Invalid submitted data type', Response::HTTP_BAD_REQUEST, $var, $expectedTypes);
+            throw new InvalidTypeException(
+                'Invalid submitted data type',
+                Response::HTTP_BAD_REQUEST,
+                $var,
+                $expectedTypes
+            );
         }
         return true;
     }
@@ -70,7 +76,7 @@ class NormalizeType implements NormalizeTypeInterface
      */
     public function checkAvailableType($type)
     {
-        if (!in_array($type, $this->availableTypes )) {
+        if (!in_array($type, $this->availableTypes)) {
             throw new InvalidTypeException('Unavailable data type', Response::HTTP_BAD_REQUEST, $type);
         }
         return true;

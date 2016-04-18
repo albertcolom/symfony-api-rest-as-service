@@ -19,8 +19,7 @@ class ProductType extends AbstractType
             ->add('name')
             ->add('description')
             ->add('active')
-            ->add('category')
-        ;
+            ->add('category');
     }
     
     /**
@@ -28,11 +27,11 @@ class ProductType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(array(
+        $resolver->setDefaults([
             'data_class' => Product::class,
             'allow_extra_fields' => true,
             'csrf_protection' => false
-        ));
+        ]);
     }
 
     public function getBlockPrefix()

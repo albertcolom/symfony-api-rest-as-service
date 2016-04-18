@@ -17,8 +17,7 @@ class ProductData extends AbstractFixture implements OrderedFixtureInterface
     {
         self::$products = [];
 
-        foreach($this->getDataArray() as $reference => $value) {
-
+        foreach ($this->getDataArray() as $reference => $value) {
             $product = new Product();
             $product->setName($value['name']);
             $product->setDescription($value['description']);

@@ -46,8 +46,12 @@ class RestView implements RestViewInterface
     /**
      * {@inheritdoc}
      */
-    public function createRedirect($route, array $parameters = [], $statusCode = Response::HTTP_FOUND, array $headers = [])
-    {
+    public function createRedirect(
+        $route,
+        array $parameters = [],
+        $statusCode = Response::HTTP_FOUND,
+        array $headers = []
+    ) {
         return $this->view->createRouteRedirect($route, $parameters, $statusCode, $headers);
     }
 }

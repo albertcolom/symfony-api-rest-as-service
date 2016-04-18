@@ -22,8 +22,8 @@ class NormalizeSort implements NormalizeSortInterface
      */
     public function normalize($data = null)
     {
-        if($data && !is_array($data)) {
-            foreach(explode(',', $data) as $val){
+        if ($data && !is_array($data)) {
+            foreach (explode(',', $data) as $val) {
                 $key = preg_replace("/[^A-Za-z0-9]/", '', $val);
                 $this->sort[$key] = strpos($val, '-', 0)=== 0 ? 'DESC' : 'ASC';
             }

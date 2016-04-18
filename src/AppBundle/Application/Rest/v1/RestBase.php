@@ -48,8 +48,14 @@ class RestBase implements RestBaseInterface
      */
     private $serializerContext;
 
-    public function __construct(EntityManagerInterface $em, RestViewInterface $restView, RequestNormalizerInterface $requestNormalizer, FormFactoryInterface $formFactory, FieldsListExclusionStrategy $fieldsListExclusionStrategy, SerializationContext $serializerContext)
-    {
+    public function __construct(
+        EntityManagerInterface $em,
+        RestViewInterface $restView,
+        RequestNormalizerInterface $requestNormalizer,
+        FormFactoryInterface $formFactory,
+        FieldsListExclusionStrategy $fieldsListExclusionStrategy,
+        SerializationContext $serializerContext
+    ) {
         $this->em = $em;
         $this->restView = $restView;
         $this->requestNormalizer = $requestNormalizer;
@@ -65,7 +71,8 @@ class RestBase implements RestBaseInterface
     {
         /** @var $normalizedData RequestNormalizerData */
         $normalizedData = $this->requestNormalizer->normalize($params);
-        return $this->restView->createView($entity)->setSerializationContext($this->getSerializationContext($normalizedData));
+        return $this->restView->createView($entity)
+            ->setSerializationContext($this->getSerializationContext($normalizedData));
     }
 
     /**
@@ -79,7 +86,8 @@ class RestBase implements RestBaseInterface
         $result =$this->em->getRepository($entity)
             ->findBy([], $normalizedData->getSort(), $normalizedData->getLimit(), $normalizedData->getOffset());
 
-        return $this->restView->createView($result)->setSerializationContext($this->getSerializationContext($normalizedData));
+        return $this->restView->createView($result)
+            ->setSerializationContext($this->getSerializationContext($normalizedData));
     }
 
     /**
@@ -123,14 +131,12 @@ class RestBase implements RestBaseInterface
         try {
             $data =  $this->processForm($entity, $formType, $request, $type);
 
-            if($redirect) {
+            if ($redirect) {
                 return $this->restView->createRedirect($redirect, ['entity'=>$data->getId()], $HttpResponse);
-            }else{
+            } else {
                 return $entity;
             }
-
         } catch (InvalidFormException $exception) {
-
             return $exception->getForm();
         }
     }
@@ -142,13 +148,13 @@ class RestBase implements RestBaseInterface
      * @param $method
      * @return mixed
      */
-    private function processForm($entity, $formType, Request $request, $method){
+    private function processForm($entity, $formType, Request $request, $method)
+    {
 
         $form = $this->formFactory->create($formType, $entity, ["method" => $method]);
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-
             $data = $form->getData();
             $this->em->persist($data);
             $this->em->flush();

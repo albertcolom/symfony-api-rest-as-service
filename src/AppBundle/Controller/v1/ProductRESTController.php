@@ -32,7 +32,8 @@ class ProductRESTController extends Controller
      *  }
      * )
      *
-     * @Annotations\QueryParam(name="fields", nullable=true, array=true, description="Fields to return. Must be an array ie. &fields[entityA]=id,name&fields[entityB]=id")
+     * @Annotations\QueryParam(name="fields", nullable=true, array=true,
+     *     description="Fields to return. Must be an array ie. &fields[entityA]=id,name&fields[entityB]=id")
      *
      * @param Product $entity
      * @param ParamFetcherInterface $paramFetcher
@@ -57,10 +58,14 @@ class ProductRESTController extends Controller
      *   }
      * )
      *
-     * @Annotations\QueryParam(name="offset", requirements="\d+", default=0, nullable=true, description="Offset from which to start listing pages ie. offset=1")
-     * @Annotations\QueryParam(name="limit", requirements="\d+", default=20, description="How many pages to return ie. limit=20")
-     * @Annotations\QueryParam(name="sort", nullable=true,  description="JsonApi: Order by fields ie. &sort=-field1,field2 (-field1: DESC | field2: ASC)")
-     * @Annotations\QueryParam(name="fields", nullable=true, array=true, description="JsonApi: Fields to return. Must be an array ie. &fields[entityA]=id,name&fields[entityB]=id")
+     * @Annotations\QueryParam(name="offset", requirements="\d+", default=0, nullable=true,
+     *     description="Offset from which to start listing pages ie. offset=1")
+     * @Annotations\QueryParam(name="limit", requirements="\d+", default=20,
+     *     description="How many pages to return ie. limit=20")
+     * @Annotations\QueryParam(name="sort", nullable=true,
+     *     description="JsonApi: Order by fields ie. &sort=-field1,field2 (-field1: DESC | field2: ASC)")
+     * @Annotations\QueryParam(name="fields", nullable=true, array=true,
+     *     description="JsonApi: Fields to return. Must be an array ie. &fields[entityA]=id,name&fields[entityB]=id")
      *
      * @param ParamFetcherInterface $paramFetcher
      * @return Response

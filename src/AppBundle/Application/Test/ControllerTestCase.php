@@ -23,9 +23,7 @@ abstract class ControllerTestCase extends WebTestCase
     public function setUp()
     {
         parent::setUp();
-        $this->client = static::createClient(array(), array(
-            'HTTP_HOST' => self::HTTP_HOST,
-        ));
+        $this->client = static::createClient([], ['HTTP_HOST' => self::HTTP_HOST]);
     }
 
     /**

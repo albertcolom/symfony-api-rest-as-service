@@ -73,7 +73,7 @@ class ProductRESTControllerTest extends ControllerTestCase
         $this->assertStatusCode(Response::HTTP_OK, $this->client);
         $content = $this->client->getResponse()->getContent();
 
-        $this->assertEquals($new['name'], $this->getValueFromJson($content,'name'));
+        $this->assertEquals($new['name'], $this->getValueFromJson($content, 'name'));
     }
 
     public function testJsonPutProductActionShouldModifyWithHeaderLocation()
@@ -95,8 +95,8 @@ class ProductRESTControllerTest extends ControllerTestCase
         $this->assertStatusCode(Response::HTTP_OK, $this->client);
         $content = $this->client->getResponse()->getContent();
 
-        $this->assertEquals($this->getValueFromJson($content,'id'), $product->getId());
-        $this->assertEquals($this->getValueFromJson($modify,'name'), $this->getValueFromJson($content,'name'));
+        $this->assertEquals($this->getValueFromJson($content, 'id'), $product->getId());
+        $this->assertEquals($this->getValueFromJson($modify, 'name'), $this->getValueFromJson($content, 'name'));
     }
 
     public function testJsonDeleteProductAction()
