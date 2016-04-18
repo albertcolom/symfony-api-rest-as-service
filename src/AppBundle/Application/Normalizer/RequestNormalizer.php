@@ -40,6 +40,7 @@ class RequestNormalizer implements RequestNormalizerInterface
         $this->normalizeOffset($params);
         $this->normalizeLimit($params);
         $this->normalizeSort($params);
+        $this->normalizeFields($params);
         $this->normalizeGroups($params);
 
         return $this->requestNormalizerData;
@@ -86,6 +87,16 @@ class RequestNormalizer implements RequestNormalizerInterface
         $groupsData = $this->checkAndGet($params, 'groups', requestNormalizerData::GROUPS);
         $this->normalizeType->checkExpectedType($groupsData, 'array');
         $this->requestNormalizerData->setGroups($groupsData);
+    }
+
+    /**
+     * @param array $params
+     */
+    private function normalizeFields(array $params)
+    {
+        $fieldsData = $this->checkAndGet($params, 'fields', requestNormalizerData::FIELDS);
+        $this->normalizeType->checkExpectedType($fieldsData, 'array');
+        $this->requestNormalizerData->setFields($fieldsData);
     }
 
     /**
