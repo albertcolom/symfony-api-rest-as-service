@@ -2,7 +2,7 @@
 
 namespace AppBundle\Application\Rest\v1;
 
-use AppBundle\Application\Normalizer\RequestNormalizerData;
+use AppBundle\Application\Normalizer\RequestNormalizerDataInterface;
 use AppBundle\Application\Normalizer\RequestNormalizerInterface;
 use AppBundle\Application\Serializer\FieldsListExclusionStrategy;
 use AppBundle\Application\Exception\InvalidFormException;
@@ -69,7 +69,7 @@ class RestBase implements RestBaseInterface
      */
     public function get($entity, array $params)
     {
-        /** @var $normalizedData RequestNormalizerData */
+        /** @var $normalizedData RequestNormalizerDataInterface */
         $normalizedData = $this->requestNormalizer->normalize($params);
         return $this->restView->createView($entity)
             ->setSerializationContext($this->getSerializationContext($normalizedData));
@@ -80,7 +80,7 @@ class RestBase implements RestBaseInterface
      */
     public function getCollection($entity, array $params)
     {
-        /** @var $normalizedData RequestNormalizerData */
+        /** @var $normalizedData RequestNormalizerDataInterface */
         $normalizedData = $this->requestNormalizer->normalize($params);
 
         $result =$this->em->getRepository($entity)
@@ -166,10 +166,10 @@ class RestBase implements RestBaseInterface
     }
 
     /**
-     * @param RequestNormalizerData $normalizedData
+     * @param RequestNormalizerDataInterface $normalizedData
      * @return SerializationContext
      */
-    public function getSerializationContext(RequestNormalizerData $normalizedData)
+    public function getSerializationContext(RequestNormalizerDataInterface $normalizedData)
     {
         $this->fieldsListExclusionStrategy->setFields($normalizedData->getFields());
 
