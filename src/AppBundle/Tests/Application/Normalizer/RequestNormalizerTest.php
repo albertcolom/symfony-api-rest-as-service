@@ -24,6 +24,10 @@ class RequestNormalizerTest extends BaseTestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $sortMock->expects($this->any())
+            ->method('normalize')
+            ->will($this->returnValue([]));
+
         $typeMock = $this->getMockBuilder(NormalizeType::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -41,6 +45,12 @@ class RequestNormalizerTest extends BaseTestCase
     public function tearDown()
     {
         unset($this->requestNormalizer);
+    }
+
+    public function testNormalizeDefaultRequestNormalizerData()
+    {
+        $normalizerData = $this->requestNormalizer->normalize([]);
+        $this->assertInstanceOf(RequestNormalizerData::class, $normalizerData);
     }
 
     /**
