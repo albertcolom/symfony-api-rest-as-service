@@ -116,6 +116,38 @@ class ProductRESTControllerTest extends ControllerTestCase
         $this->assertStatusCode(Response::HTTP_NOT_FOUND, $this->client);
     }
 
+    public function testJsonGetCategoriesActionWithFilterLimitAndOffset()
+    {
+        $this->prepareFixtures();
+        $route = $this->getUrl('api_v1_get_products', ['limit'=>1, 'offset'=>1]);
+        $this->client->request('GET', $route, [], [], $this->getJsonHeaders());
+
+        $this->assertStatusCode(Response::HTTP_OK, $this->client);
+
+        $content = $this->client->getResponse()->getContent();
+        $this->assertCount(1, json_decode($content));
+
+        $decodeContent = json_decode($content);
+        $this->assertEquals(2, $decodeContent['0']->id);
+    }
+
+    public function testJsonGetCategoriesActionWithFilterFieldsAndSort()
+    {
+        $this->prepareFixtures();
+        $route = $this->getUrl('api_v1_get_products', ['fields[product]'=>'id', 'sort'=>'-id']);
+        $this->client->request('GET', $route, [], [], $this->getJsonHeaders());
+
+        $this->assertStatusCode(Response::HTTP_OK, $this->client);
+
+        $content = $this->client->getResponse()->getContent();
+        $expected = [
+            ['id' => 3],
+            ['id' => 2],
+            ['id' => 1]
+        ];
+        $this->assertEquals($content, json_encode($expected));
+    }
+
     /**
      * @return array
      */
