@@ -33,7 +33,8 @@
         "phpunit/phpunit": "^5.2",
         "symfony/phpunit-bridge": "~2.7",
         "liip/functional-test-bundle": "^1.4",
-        "doctrine/doctrine-fixtures-bundle": "^2.3"
+        "doctrine/doctrine-fixtures-bundle": "^2.3",
+        "squizlabs/php_codesniffer": "*"
     },
     "scripts": {
         "post-install-cmd": [
