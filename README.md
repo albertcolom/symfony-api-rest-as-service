@@ -37,7 +37,7 @@ $ app/console doctrine:fixtures:load
 ``` 
 
 ### Example method
-Get a collection with ApiDoc and QueryParam
+Get a generic collection with QueryParam and ApiDoc
 ```php
 <?php
 
@@ -85,5 +85,5 @@ $ bin/phpunit -c  app
 
 ### CodeSniffer PSR-2
 ```sh
-$ phpcs --standard=psr2  src/AppBundle
+$ bin/phpcs --standard=PSR2 src
 ```
