@@ -17,7 +17,7 @@ Vagrant & Ansible:
 ### Installation
 Clone this repository
 ```sh
-$ git clone git@github.com:albertcolom/...
+$ git clone git@github.com:albertcolom/symfony-api-rest-as-service
 ```
 Install dependencies
 ```sh
