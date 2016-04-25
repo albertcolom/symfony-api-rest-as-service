@@ -1,11 +1,11 @@
 app_product_v1:
-    resource: "@AppBundle/Controller/V1/ProductRESTController.php"
+    resource: "@AppBundle/Controller/v1/ProductRESTController.php"
     type:   rest
     prefix:   /v1
     name_prefix:  api_v1_
 
 app_category_v1:
-    resource: "@AppBundle/Controller/V1/CategoryRESTController.php"
+    resource: "@AppBundle/Controller/v1/CategoryRESTController.php"
     type:   rest
     prefix:   /v1
     name_prefix:  api_v1_
