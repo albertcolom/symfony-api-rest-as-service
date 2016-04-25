@@ -1,5 +1,6 @@
 Symfony API REST as Service
 ===========================
+[![Build Status](https://travis-ci.org/albertcolom/symfony-api-rest-as-service.svg?branch=master)](https://travis-ci.org/albertcolom/symfony-api-rest-as-service)
 
 ### Development environment (optional)
 Vagrant & Ansible:
