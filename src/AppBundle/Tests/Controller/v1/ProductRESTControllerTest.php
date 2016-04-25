@@ -82,10 +82,15 @@ class ProductRESTControllerTest extends ControllerTestCase
         /** @var  $product Product */
         $product = end($products);
 
-        $modify = '{"name":"test put"}';
+        $modify = [
+            'name' => 'name put',
+            'description' => 'description put',
+            'active' => false,
+            'category' => 1
+        ];
 
         $route = $this->getUrl('api_v1_put_product', ['entity'=>$product->getId()]);
-        $this->client->request('PUT', $route, [], [], $this->getJsonHeaders(), $modify);
+        $this->client->request('PUT', $route, [], [], $this->getJsonHeaders(), json_encode($modify));
 
         $this->assertStatusCode(Response::HTTP_NO_CONTENT, $this->client);
 
@@ -96,7 +101,34 @@ class ProductRESTControllerTest extends ControllerTestCase
         $content = $this->client->getResponse()->getContent();
 
         $this->assertEquals($this->getValueFromJson($content, 'id'), $product->getId());
-        $this->assertEquals($this->getValueFromJson($modify, 'name'), $this->getValueFromJson($content, 'name'));
+        $this->assertEquals($modify['name'], $this->getValueFromJson($content, 'name'));
+        $this->assertEquals($modify['description'], $this->getValueFromJson($content, 'description'));
+        $this->assertEquals($modify['active'], $this->getValueFromJson($content, 'active'));
+    }
+
+    public function testJsonPatchProductActionShouldModifyWithHeaderLocation()
+    {
+        $products = $this->prepareFixtures();
+        /** @var  $product Product */
+        $product = end($products);
+
+        $modify = [
+            'name' => 'name patch',
+        ];
+
+        $route = $this->getUrl('api_v1_patch_product', ['entity'=>$product->getId()]);
+        $this->client->request('PATCH', $route, [], [], $this->getJsonHeaders(), json_encode($modify));
+
+        $this->assertStatusCode(Response::HTTP_NO_CONTENT, $this->client);
+
+        $head_location = $this->client->getResponse()->headers->get('location');
+        $this->client->request('GET', $head_location, [], [], $this->getJsonHeaders());
+
+        $this->assertStatusCode(Response::HTTP_OK, $this->client);
+        $content = $this->client->getResponse()->getContent();
+
+        $this->assertEquals($this->getValueFromJson($content, 'id'), $product->getId());
+        $this->assertEquals($modify['name'], $this->getValueFromJson($content, 'name'));
     }
 
     public function testJsonDeleteProductAction()

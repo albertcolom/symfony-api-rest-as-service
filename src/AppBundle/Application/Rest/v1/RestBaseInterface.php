@@ -45,6 +45,15 @@ interface RestBaseInterface
 
     /**
      * @param $entity
+     * @param $formType
+     * @param Request $request
+     * @param string $redirect
+     * @return array|View|null
+     */
+    public function patch($entity, $formType, Request $request, $redirect = null);
+
+    /**
+     * @param $entity
      * @return View
      */
     public function delete($entity);

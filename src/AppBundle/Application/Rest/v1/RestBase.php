@@ -109,6 +109,14 @@ class RestBase implements RestBaseInterface
     /**
      * {@inheritdoc}
      */
+    public function patch($entity, $formType, Request $request, $redirect = null)
+    {
+        return $this->saveData('PATCH', $entity, $formType, $request, $redirect, Response::HTTP_NO_CONTENT);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function delete($entity)
     {
         $this->em->remove($entity);

@@ -147,7 +147,9 @@ class CategoryRESTController extends Controller
      */
     public function patchAction(Request $request, Category $entity)
     {
-        return $this->putAction($request, $entity);
+        /** @var $base RestBase */
+        $base = $this->container->get('app.rest.base');
+        return $base->patch($entity, CategoryType::class, $request, 'api_v1_get_category');
     }
 
     /**

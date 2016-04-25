@@ -57,10 +57,13 @@ class CategoryRESTControllerTest extends ControllerTestCase
         /** @var  $category Category */
         $category = end($categories);
 
-        $modify = '{"name":"category test put"}';
+        $modify = [
+            'name' => 'name put',
+            'description' => 'description put'
+        ];
 
         $route = $this->getUrl('api_v1_put_category', ['entity'=>$category->getId()]);
-        $this->client->request('PUT', $route, [], [], $this->getJsonHeaders(), $modify);
+        $this->client->request('PUT', $route, [], [], $this->getJsonHeaders(), json_encode($modify));
 
         $this->assertStatusCode(Response::HTTP_NO_CONTENT, $this->client);
 
@@ -71,7 +74,33 @@ class CategoryRESTControllerTest extends ControllerTestCase
         $content = $this->client->getResponse()->getContent();
 
         $this->assertEquals($this->getValueFromJson($content, 'id'), $category->getId());
-        $this->assertEquals($this->getValueFromJson($modify, 'name'), $this->getValueFromJson($content, 'name'));
+        $this->assertEquals($modify['name'], $this->getValueFromJson($content, 'name'));
+        $this->assertEquals($modify['description'], $this->getValueFromJson($content, 'description'));
+    }
+
+    public function testJsonPatchCategoryActionShouldModifyWithHeaderLocation()
+    {
+        $categories = $this->prepareFixtures();
+        /** @var  $category Category */
+        $category = end($categories);
+
+        $modify = [
+            'name' => 'name patch',
+        ];
+
+        $route = $this->getUrl('api_v1_patch_category', ['entity'=>$category->getId()]);
+        $this->client->request('PATCH', $route, [], [], $this->getJsonHeaders(), json_encode($modify));
+
+        $this->assertStatusCode(Response::HTTP_NO_CONTENT, $this->client);
+
+        $head_location = $this->client->getResponse()->headers->get('location');
+        $this->client->request('GET', $head_location, [], [], $this->getJsonHeaders());
+
+        $this->assertStatusCode(Response::HTTP_OK, $this->client);
+        $content = $this->client->getResponse()->getContent();
+
+        $this->assertEquals($this->getValueFromJson($content, 'id'), $category->getId());
+        $this->assertEquals($modify['name'], $this->getValueFromJson($content, 'name'));
     }
 
     public function testJsonGetCategoriesAction()

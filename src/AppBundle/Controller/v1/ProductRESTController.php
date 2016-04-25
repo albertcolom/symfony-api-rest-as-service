@@ -122,6 +122,7 @@ class ProductRESTController extends Controller
      */
     public function putAction(Request $request, Product $entity)
     {
+        /** @var $base RestBase */
         $base = $this->container->get('app.rest.base');
         return $base->put($entity, ProductType::class, $request, 'api_v1_get_product');
     }
@@ -146,7 +147,9 @@ class ProductRESTController extends Controller
      */
     public function patchAction(Request $request, Product $entity)
     {
-        return $this->putAction($request, $entity);
+        /** @var $base RestBase */
+        $base = $this->container->get('app.rest.base');
+        return $base->patch($entity, ProductType::class, $request, 'api_v1_get_product');
     }
 
     /**
