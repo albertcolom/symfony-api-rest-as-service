@@ -62,7 +62,7 @@ class RequestNormalizer implements RequestNormalizerInterface
      */
     private function normalizeLimit(array $params)
     {
-        $fieldsData = $this->checkAndGet($params, 'limit', requestNormalizerData::FIELDS);
+        $fieldsData = $this->checkAndGet($params, 'limit', requestNormalizerData::LIMIT);
         $fieldsDataType = $this->normalizeType->setVarType($fieldsData, 'integer');
         $this->normalizeType->checkExpectedType($fieldsDataType, 'integer');
         $this->requestNormalizerData->setLimit($fieldsDataType);
