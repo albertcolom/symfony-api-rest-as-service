@@ -16,14 +16,14 @@ interface RestBaseInterface
      * @param array $params
      * @return View
      */
-    public function get($entity, array $params);
+    public function get($entity, array $params = []);
 
     /**
      * @param $entity
      * @param array $params
      * @return View
      */
-    public function getCollection($entity, array $params);
+    public function getCollection($entity, array $params = []);
 
     /**
      * @param $entity

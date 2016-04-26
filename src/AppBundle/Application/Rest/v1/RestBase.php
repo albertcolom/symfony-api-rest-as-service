@@ -67,7 +67,7 @@ class RestBase implements RestBaseInterface
     /**
      * {@inheritdoc}
      */
-    public function get($entity, array $params)
+    public function get($entity, array $params = [])
     {
         /** @var $normalizedData RequestNormalizerDataInterface */
         $normalizedData = $this->requestNormalizer->normalize($params);
@@ -78,7 +78,7 @@ class RestBase implements RestBaseInterface
     /**
      * {@inheritdoc}
      */
-    public function getCollection($entity, array $params)
+    public function getCollection($entity, array $params = [])
     {
         /** @var $normalizedData RequestNormalizerDataInterface */
         $normalizedData = $this->requestNormalizer->normalize($params);
