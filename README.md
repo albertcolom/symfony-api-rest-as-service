@@ -37,8 +37,37 @@ Load Fixtures
 $ app/console doctrine:fixtures:load
 ``` 
 
-### Example method
-Get a generic collection with QueryParam and ApiDoc
+### Example methods
+GET Entity
+```php
+<?php
+    /**
+     *
+     * @ApiDoc(
+     *  resource=true,
+     *  description="Get entity instance",
+     *  statusCodes = {
+     *      200 = "Returned when successful",
+     *      404 = "Returned when not found"
+     *  }
+     * )
+     *
+     * @Annotations\QueryParam(name="fields", nullable=true, array=true,
+     *     description="Fields to return. Must be an array ie. &fields[entityA]=id,name&fields[entityB]=id")
+     *
+     * @param Entity $entity
+     * @param ParamFetcherInterface $paramFetcher
+     * @return Response
+     */
+    public function getAction(Entity $entity, ParamFetcherInterface $paramFetcher)
+    {
+        /** @var $base RestBase */
+        $base = $this->container->get('app.rest.base');
+        return $base->get($entity, $paramFetcher->all());
+    }
+```
+
+GET Collection
 ```php
 <?php
 
@@ -70,6 +99,93 @@ Get a generic collection with QueryParam and ApiDoc
         /** @var $base RestBase */
         $base = $this->container->get('app.rest.base');
         return $base->getCollection(Entity::class, $paramFetcher->all());
+    }
+``` 
+
+POST
+```php
+<?php
+
+    /**
+     *
+     * @ApiDoc(
+     *  resource=true,
+     *  description="Create entity",
+     *  input = "AppBundle\Form\EntityType",
+     *  statusCodes = {
+     *      201 = "Returned when is created",
+     *      400 = "Returned when the form has errors"
+     *  }
+     * )
+     *
+     * @param Request $request
+     * @return Response
+     */
+    public function postAction(Request $request)
+    {
+        /** @var $base RestBase */
+        $base = $this->container->get('app.rest.base');
+        return $base->post(new Entity(), EntityType::class, $request, 'url_redirect');
+    }
+``` 
+
+PUT
+```php
+<?php
+
+    /**
+     *
+     * @ApiDoc(
+     *  resource=true,
+     *  description="Update entity",
+     *  input = "AppBundle\Form\EntityType",
+     *  statusCodes = {
+     *      201 = "Returned when is created",
+     *      204 = "Returned when successful",
+     *      400 = "Returned when the form has errors"
+     *  }
+     * )
+     *
+     *
+     * @param Request $request
+     * @param $entity
+     * @return Response
+     */
+    public function putAction(Request $request, Entity $entity)
+    {
+        /** @var $base RestBase */
+        $base = $this->container->get('app.rest.base');
+        return $base->put($entity, EntityType::class, $request, 'url_redirect');
+    }
+``` 
+
+PATCH
+```php
+<?php
+
+    /**
+     *
+     * @ApiDoc(
+     *  resource=true,
+     *  description="Update entity",
+     *  input = "AppBundle\Form\EntityType",
+     *  statusCodes = {
+     *      201 = "Returned when is created",
+     *      204 = "Returned when successful",
+     *      400 = "Returned when the form has errors"
+     *  }
+     * )
+     *
+     *
+     * @param Request $request
+     * @param $entity
+     * @return Response
+     */
+    public function putAction(Request $request, Entity $entity)
+    {
+        /** @var $base RestBase */
+        $base = $this->container->get('app.rest.base');
+        return $base->patch($entity, EntityType::class, $request, 'url_redirect');
     }
 ``` 
 
