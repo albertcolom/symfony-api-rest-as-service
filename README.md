@@ -37,6 +37,45 @@ Load Fixtures
 $ app/console doctrine:fixtures:load
 ``` 
 
+### List of services
+[src/AppBundle/Resources/config/services.yml](https://github.com/albertcolom/symfony-api-rest-as-service/blob/master/src/AppBundle/Resources/config/services.yml)
+```php
+services:
+    util.inflector:
+      class: AppBundle\Util\Inflector\NoPluralize
+
+    app.request.normalize.sort:
+      class: AppBundle\Application\Normalizer\NormalizeSort
+
+    app.request.normalize.type:
+      class: AppBundle\Application\Normalizer\NormalizeType
+
+    app.request.normalize.data:
+      class: AppBundle\Application\Normalizer\RequestNormalizerData
+
+    app.request.normalize:
+      class: AppBundle\Application\Normalizer\RequestNormalizer
+      arguments: ['@app.request.normalize.sort', '@app.request.normalize.type','@app.request.normalize.data']
+
+    app.fos_rest.view.view:
+      class: FOS\RestBundle\View\View
+      factory: [FOS\RestBundle\View\View, create]
+
+    app.rest.view:
+      class: AppBundle\Application\Rest\v1\RestView
+      arguments: ['@fos_rest.view_handler','@app.fos_rest.view.view']
+
+    app.serializer.fields.exclusion:
+      class: AppBundle\Application\Serializer\FieldsListExclusionStrategy
+
+    app.jms.serializer.context:
+      class: JMS\Serializer\SerializationContext
+
+    app.rest.base:
+      class: AppBundle\Application\Rest\v1\RestBase
+      arguments: ['@doctrine.orm.entity_manager','@app.rest.view','@app.request.normalize','@form.factory','@app.serializer.fields.exclusion','@app.jms.serializer.context']
+``
+
 ### Example methods
 GET Entity
 ```php
