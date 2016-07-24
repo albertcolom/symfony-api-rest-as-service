@@ -74,6 +74,14 @@ services:
     app.rest.base:
       class: AppBundle\Application\Rest\v1\RestBase
       arguments: ['@doctrine.orm.entity_manager','@app.rest.view','@app.request.normalize','@form.factory','@app.serializer.fields.exclusion','@app.jms.serializer.context']
+
+    app.controller.category:
+      class: AppBundle\Controller\v1\CategoryRESTController
+      arguments: ['@app.rest.controller']
+
+    app.controller.product:
+      class: AppBundle\Controller\v1\ProductRESTController
+      arguments: ['@app.rest.controller']
 ```
 
 ### Example methods
@@ -100,9 +108,7 @@ GET Entity
      */
     public function getAction(Entity $entity, ParamFetcherInterface $paramFetcher)
     {
-        /** @var $base RestBase */
-        $base = $this->container->get('app.rest.base');
-        return $base->get($entity, $paramFetcher->all());
+        return $this->restController->get($entity, $paramFetcher->all());
     }
 ```
 
@@ -135,9 +141,7 @@ GET Collection
      */
     public function cgetAction(ParamFetcherInterface $paramFetcher)
     {
-        /** @var $base RestBase */
-        $base = $this->container->get('app.rest.base');
-        return $base->getCollection(Entity::class, $paramFetcher->all());
+        return $this->restController->getCollection(Entity::class, $paramFetcher->all());
     }
 ``` 
 
@@ -162,9 +166,7 @@ POST
      */
     public function postAction(Request $request)
     {
-        /** @var $base RestBase */
-        $base = $this->container->get('app.rest.base');
-        return $base->post(new Entity(), EntityType::class, $request, 'url_redirect');
+        return $this->restController->post(new Entity(), EntityType::class, $request, 'url_redirect');
     }
 ``` 
 
@@ -192,9 +194,7 @@ PUT
      */
     public function putAction(Request $request, Entity $entity)
     {
-        /** @var $base RestBase */
-        $base = $this->container->get('app.rest.base');
-        return $base->put($entity, EntityType::class, $request, 'url_redirect');
+        return $this->restController->put($entity, EntityType::class, $request, 'url_redirect');
     }
 ``` 
 
@@ -222,9 +222,7 @@ PATCH
      */
     public function putAction(Request $request, Entity $entity)
     {
-        /** @var $base RestBase */
-        $base = $this->container->get('app.rest.base');
-        return $base->patch($entity, EntityType::class, $request, 'url_redirect');
+        return $this->restController->patch($entity, EntityType::class, $request, 'url_redirect');
     }
 ``` 
 

@@ -16,7 +16,7 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * @author Albert Colom <skolom@gmail.com>
  */
-class RestBase implements RestBaseInterface
+class RestController implements RestControllerInterface
 {
     /**
      * @var EntityManagerInterface
@@ -137,10 +137,10 @@ class RestBase implements RestBaseInterface
     private function saveData($type, $entity, $formType, Request $request, $redirect, $HttpResponse)
     {
         try {
-            $data =  $this->processForm($entity, $formType, $request, $type);
+            $data = $this->processForm($entity, $formType, $request, $type);
 
             if ($redirect) {
-                return $this->restView->createRedirect($redirect, ['entity'=>$data->getId()], $HttpResponse);
+                return $this->restView->createRedirect($redirect, ['entity' => $data->getId()], $HttpResponse);
             } else {
                 return $entity;
             }

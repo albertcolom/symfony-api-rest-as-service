@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\Request;
 /**
  * @author Albert Colom <skolom@gmail.com>
  */
-interface RestBaseInterface
+interface RestControllerInterface
 {
 
     /**

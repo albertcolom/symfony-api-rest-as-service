@@ -2,8 +2,7 @@
 
 namespace AppBundle\Controller\v1;
 
-use AppBundle\Application\Rest\v1\RestBase;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use AppBundle\Application\Rest\v1\RestControllerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use AppBundle\Entity\Category;
@@ -18,8 +17,18 @@ use FOS\RestBundle\Controller\Annotations;
  * Category controller.
  * @RouteResource("Category")
  */
-class CategoryRESTController extends Controller
+class CategoryRESTController
 {
+    /**
+     * @var RestControllerInterface
+     */
+    private $restController;
+
+    public function __construct(RestControllerInterface $restController)
+    {
+        $this->restController = $restController;
+    }
+
     /**
      *
      * @ApiDoc(
@@ -41,9 +50,7 @@ class CategoryRESTController extends Controller
      */
     public function getAction(Category $entity, ParamFetcherInterface $paramFetcher)
     {
-        /** @var $base RestBase */
-        $base = $this->container->get('app.rest.base');
-        return $base->get($entity, $paramFetcher->all());
+        return $this->restController->get($entity, $paramFetcher->all());
     }
 
     /**
@@ -72,11 +79,8 @@ class CategoryRESTController extends Controller
      */
     public function cgetAction(ParamFetcherInterface $paramFetcher)
     {
-        /** @var $base RestBase */
-        $base = $this->container->get('app.rest.base');
-        return $base->getCollection(Category::class, $paramFetcher->all());
+        return $this->restController->getCollection(Category::class, $paramFetcher->all());
     }
-
 
     /**
      *
@@ -96,9 +100,7 @@ class CategoryRESTController extends Controller
      */
     public function postAction(Request $request)
     {
-        /** @var $base RestBase */
-        $base = $this->container->get('app.rest.base');
-        return $base->post(new Category(), CategoryType::class, $request, 'api_v1_get_category');
+        return $this->restController->post(new Category(), CategoryType::class, $request, 'api_v1_get_category');
     }
 
     /**
@@ -122,9 +124,7 @@ class CategoryRESTController extends Controller
      */
     public function putAction(Request $request, Category $entity)
     {
-        /** @var $base RestBase */
-        $base = $this->container->get('app.rest.base');
-        return $base->put($entity, CategoryType::class, $request, 'api_v1_get_category');
+        return $this->restController->put($entity, CategoryType::class, $request, 'api_v1_get_category');
     }
 
     /**
@@ -147,9 +147,7 @@ class CategoryRESTController extends Controller
      */
     public function patchAction(Request $request, Category $entity)
     {
-        /** @var $base RestBase */
-        $base = $this->container->get('app.rest.base');
-        return $base->patch($entity, CategoryType::class, $request, 'api_v1_get_category');
+        return $this->restController->patch($entity, CategoryType::class, $request, 'api_v1_get_category');
     }
 
     /**
@@ -169,8 +167,6 @@ class CategoryRESTController extends Controller
      */
     public function deleteAction(Category $entity)
     {
-        /** @var $base RestBase */
-        $base = $this->container->get('app.rest.base');
-        return $base->delete($entity);
+        return $this->restController->delete($entity);
     }
 }
