@@ -71,8 +71,8 @@ services:
     app.jms.serializer.context:
       class: JMS\Serializer\SerializationContext
 
-    app.rest.base:
-      class: AppBundle\Application\Rest\v1\RestBase
+    app.rest.controller:
+      class: AppBundle\Application\Rest\v1\RestController
       arguments: ['@doctrine.orm.entity_manager','@app.rest.view','@app.request.normalize','@form.factory','@app.serializer.fields.exclusion','@app.jms.serializer.context']
 
     app.controller.category:
